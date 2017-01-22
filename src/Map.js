@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Precinct from './Precinct';
+import DataTable from './DataTable';
 
 class Map extends Component {
   makePrecinctClickHandler(id) {
@@ -37,7 +38,7 @@ class Map extends Component {
   }
 
   render() {
-    const {scale, width, height} = this.props;
+    const {scale, width, height, numDistricts} = this.props;
 
     return (
       <div className="container">
@@ -46,9 +47,8 @@ class Map extends Component {
             {Object.values(this.state.precincts)}
           </svg>
         </div>
-        <div className="data-container">
-          <span className="data-line">Data goes here.</span>
-        </div>
+        <DataTable numDistricts={numDistricts}
+                   precincts={this.state.precincts} />
       </div>
     );
   }

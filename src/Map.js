@@ -3,41 +3,45 @@ import Precinct from './Precinct';
 import DataTable from './DataTable';
 
 class Map extends Component {
-  setPrecinctDistrict(id, district) {
-    this.setState(({precincts}, _) => {
-      precincts[id] = <Precinct {...precincts[id].props}
-                                district={district} key={id} />;
-      return {precincts};
+  constructor(props) {
+    super(props);
+    const {precincts} = this.props;
+    this.state = {precinctStates: Array(precincts.length).fill(0)};
+  }
+
+  setPrecinctDistrict(index, district) {
+    this.setState(({precinctStates}, _) => {
+      precinctStates[index] = district;
+      return {precinctStates};
     });
   }
 
-  makePrecinctMouseDownHandler(id) {
+  makePrecinctMouseDownHandler(index) {
     return () => {
-      const precinct = this.state.precincts[id];
-      const oldDistrict = precinct.props.district
+      const oldDistrict = this.state.precinctStates[index];
       let newDistrict;
       if (!oldDistrict || oldDistrict >= this.props.numDistricts) {
         newDistrict = 1;
       } else {
         newDistrict = oldDistrict + 1;
       }
-      this.setPrecinctDistrict(id, newDistrict);
+      this.setPrecinctDistrict(index, newDistrict);
       this.setState({draggingDistrict: newDistrict});
     }
   }
 
-  makePrecinctMouseEnterHandler(id) {
+  makePrecinctMouseEnterHandler(index) {
     return () => {
       if (this.state.draggingDistrict) {
-        this.setPrecinctDistrict(id, this.state.draggingDistrict);
+        this.setPrecinctDistrict(index, this.state.draggingDistrict);
       }
     }
   }
 
-  makePrecinctMouseUpHandler(id) {
+  makePrecinctMouseUpHandler(index) {
     return () => {
       if (this.state.draggingDistrict) {
-        this.setPrecinctDistrict(id, this.state.draggingDistrict);
+        this.setPrecinctDistrict(index, this.state.draggingDistrict);
       }
       this.setState({draggingDistrict: null});
     }
@@ -47,36 +51,27 @@ class Map extends Component {
     this.setState({draggingDistrict: null});
   }
 
-  constructor(props) {
-    super(props);
-    const {scale, width, height} = this.props;
-    const precincts = {}
-    let id;
-    Array(width).fill().forEach((_, i) =>
-      Array(height).fill().forEach((_, j) => {
-        id = `${i},${j}`;
-        precincts[id] = <Precinct
-          key={id} x={i * scale} y={j * scale} size={scale} district={0}
-          onMouseDown={this.makePrecinctMouseDownHandler(id)}
-          onMouseEnter={this.makePrecinctMouseEnterHandler(id)}
-          onMouseUp={this.makePrecinctMouseUpHandler(id)} />;
-      }));
-    this.state = {precincts}
-  }
-
   render() {
-    const {scale, width, height, numDistricts} = this.props;
+    const {scale, width, height, numDistricts, precincts} = this.props;
 
     return (
       <div className="container">
         <div className="map-container">
           <svg className="map" width={width * scale} height={height * scale}
+               viewBox={`0 0 ${width} ${height}`}
                onMouseLeave={this.handleMouseLeave.bind(this)}>
-            {Object.values(this.state.precincts)}
+            {precincts.map((precinct, i) =>
+              <Precinct key={[precinct.x, precinct.y]} {...precinct}
+                        district={this.state.precinctStates[i] || 0}
+                        onMouseDown={this.makePrecinctMouseDownHandler(i)}
+                        onMouseEnter={this.makePrecinctMouseEnterHandler(i)}
+                        onMouseUp={this.makePrecinctMouseUpHandler(i)} />)}
+
           </svg>
         </div>
         <DataTable numDistricts={numDistricts}
-                   precincts={this.state.precincts} />
+                   precincts={this.props.precincts}
+                   precinctStates={this.state.precinctStates} />
       </div>
     );
   }
@@ -87,6 +82,16 @@ Map.PropTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   numDistricts: PropTypes.number.isRequired,
+  precincts: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    dx: PropTypes.number.isRequired,
+    dy: PropTypes.number.isRequired,
+    dots: PropTypes.arrayOf(PropTypes.shape({
+      x: PropTypes.number.isRequired,
+      y: PropTypes.number.isRequired,
+    })),
+  })).isRequired,
 };
 
 

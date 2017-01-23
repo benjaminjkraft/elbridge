@@ -2,15 +2,11 @@ import React, { Component, PropTypes } from 'react';
 
 class DataTable extends Component {
   render() {
-    const {numDistricts, precincts} = this.props;
-    const districtSize = Object.keys(precincts).length / numDistricts;
+    const {numDistricts, precinctStates} = this.props;
+    const districtSize = precinctStates.length / numDistricts;
 
-    const districtSizes = {};
-    for (let i = 0; i <= numDistricts; i++) {
-      districtSizes[i] = 0;
-    }
-    Object.entries(precincts).forEach(
-        ([_, p]) => {districtSizes[p.props.district] += 1;});
+    const districtSizes = Array(numDistricts+1).fill(0);
+    precinctStates.forEach(p => {districtSizes[p] += 1;});
 
     return <div className="data-container">
       {Object.entries(districtSizes).map(
@@ -25,7 +21,7 @@ class DataTable extends Component {
 
 DataTable.propTypes = {
   numDistricts: PropTypes.number.isRequired,
-  precincts: PropTypes.objectOf(PropTypes.element).isRequired,
+  precinctStates: PropTypes.arrayOf(PropTypes.number).isRequired
 }
 
 export default DataTable;

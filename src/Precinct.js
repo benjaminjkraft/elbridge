@@ -11,17 +11,16 @@ const districtColors = {
 
 class Precinct extends Component {
   render() {
-    const {x, y, size, district, ...props} = this.props;
-    return <rect stroke="black" fill={districtColors[district]}
-                 x={x} y={y} width={size} height={size}
-                 {...props} />;
+    const {district, ...props} = this.props;
+    return <rect stroke="black" strokeWidth="0.01" fill={districtColors[district]} {...props} />;
   }
 }
 
 Precinct.propTypes = {
   x: PropTypes.number.isRequired,
   y: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
   district: PropTypes.number.isRequired,
 };
 

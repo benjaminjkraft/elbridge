@@ -3,7 +3,15 @@ import Precinct from './Precinct';
 import DataTable from './DataTable';
 
 class Map extends Component {
-  makePrecinctClickHandler(id) {
+  setPrecinctDistrict(id, district) {
+    this.setState(({precincts}, _) => {
+      precincts[id] = <Precinct {...precincts[id].props}
+                                district={district} key={id} />;
+      return {precincts};
+    });
+  }
+
+  makePrecinctMouseDownHandler(id) {
     return () => {
       const precinct = this.state.precincts[id];
       const oldDistrict = precinct.props.district
@@ -13,12 +21,30 @@ class Map extends Component {
       } else {
         newDistrict = oldDistrict + 1;
       }
-      this.setState(({precincts}, _) => {
-        precincts[id] = <Precinct {...precinct.props}
-                                  district={newDistrict} key={id} />;
-        return {precincts};
-      });
+      this.setPrecinctDistrict(id, newDistrict);
+      this.setState({draggingDistrict: newDistrict});
     }
+  }
+
+  makePrecinctMouseEnterHandler(id) {
+    return () => {
+      if (this.state.draggingDistrict) {
+        this.setPrecinctDistrict(id, this.state.draggingDistrict);
+      }
+    }
+  }
+
+  makePrecinctMouseUpHandler(id) {
+    return () => {
+      if (this.state.draggingDistrict) {
+        this.setPrecinctDistrict(id, this.state.draggingDistrict);
+      }
+      this.setState({draggingDistrict: null});
+    }
+  }
+
+  handleMouseLeave() {
+    this.setState({draggingDistrict: null});
   }
 
   constructor(props) {
@@ -29,10 +55,11 @@ class Map extends Component {
     Array(width).fill().forEach((_, i) =>
       Array(height).fill().forEach((_, j) => {
         id = `${i},${j}`;
-        precincts[id] = <Precinct key={id} x={i * scale} y={j * scale}
-                                  size={scale} district={0} 
-                                  onClick={this.makePrecinctClickHandler(id)}
-                                  />;
+        precincts[id] = <Precinct
+          key={id} x={i * scale} y={j * scale} size={scale} district={0}
+          onMouseDown={this.makePrecinctMouseDownHandler(id)}
+          onMouseEnter={this.makePrecinctMouseEnterHandler(id)}
+          onMouseUp={this.makePrecinctMouseUpHandler(id)} />;
       }));
     this.state = {precincts}
   }
@@ -43,7 +70,8 @@ class Map extends Component {
     return (
       <div className="container">
         <div className="map-container">
-          <svg width={width * scale} height={height * scale} className="map">
+          <svg className="map" width={width * scale} height={height * scale}
+               onMouseLeave={this.handleMouseLeave.bind(this)}>
             {Object.values(this.state.precincts)}
           </svg>
         </div>

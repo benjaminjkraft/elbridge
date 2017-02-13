@@ -10,9 +10,16 @@ const districtColors = {
 }
 
 class Precinct extends Component {
+  renderDots(dots) {
+    return dots && dots.map(({x, y}) => <circle cx={x} cy={y} r={0.03} />);
+  }
+
   render() {
-    const {district, ...props} = this.props;
-    return <rect stroke="black" strokeWidth="0.01" fill={districtColors[district]} {...props} />;
+    const {district, dots, ...props} = this.props;
+    return <g>
+      <rect stroke="black" strokeWidth="0.01" fill={districtColors[district]} {...props} />
+      {this.renderDots(dots)}
+    </g>;
   }
 }
 
@@ -22,6 +29,10 @@ Precinct.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   district: PropTypes.number.isRequired,
+  dots: PropTypes.arrayOf(PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+  })),
 };
 
 export default Precinct;

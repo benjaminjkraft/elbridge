@@ -82,16 +82,7 @@ Map.PropTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   numDistricts: PropTypes.number.isRequired,
-  precincts: PropTypes.arrayOf(PropTypes.shape({
-    x: PropTypes.number.isRequired,
-    y: PropTypes.number.isRequired,
-    dx: PropTypes.number.isRequired,
-    dy: PropTypes.number.isRequired,
-    dots: PropTypes.arrayOf(PropTypes.shape({
-      x: PropTypes.number.isRequired,
-      y: PropTypes.number.isRequired,
-    })),
-  })).isRequired,
+  precincts: PropTypes.arrayOf(Precinct.PropTypes),
 };
 
 

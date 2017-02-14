@@ -2,18 +2,30 @@ import React, { Component, PropTypes } from 'react';
 
 class DataTable extends Component {
   render() {
-    const {numDistricts, precinctStates} = this.props;
-    const districtSize = precinctStates.length / numDistricts;
+    const {numDistricts, precincts, precinctStates} = this.props;
+    const idealSize = precinctStates.length / numDistricts;
 
-    const districtSizes = Array(numDistricts+1).fill(0);
-    precinctStates.forEach(p => {districtSizes[p] += 1;});
+    const districtInfo = {};
+    precincts.forEach((p, i) => {
+        const district = precinctStates[i];
+        districtInfo[district] = districtInfo[district] || {
+            size: 0,
+            parties: {R: 0, D: 0}
+        };
+        districtInfo[district].size += 1;
+        if (p.party) {
+            districtInfo[district].parties[p.party] += 1;
+        }
+    });
 
     return <div className="data-container">
-      {Object.entries(districtSizes).map(
-        ([d, size]) => <span key={d} className="data-line">
+      {Object.entries(districtInfo).map(
+        ([d, info]) => <span key={d} className="data-line">
           {d === "0" ?
-            `Unassigned: ${size}` :
-            `District ${d}: ${size}/${districtSize}`}
+            `Unassigned: ${info.size}` :
+            `District ${d}: ${info.size}/${idealSize}`}
+          {d !== "0" && (info.parties.R || info.parties.D) ? /* TODO: colors */
+            `; ${info.parties.R} red/${info.parties.D} blue` : null}
         </span>)}
     </div>;
   }

@@ -2,25 +2,13 @@ import React, { Component, PropTypes } from 'react';
 import DistrictData from './DistrictData';
 
 class DataTable extends Component {
-  districtName(id) {
-    if (id === 0) {
-      return "Unassigned";
-    } else {
-      return `District ${id}`;
-    }
-  }
-
   render() {
     const {numDistricts, precincts, precinctStates} = this.props;
     const idealSize = precinctStates.length / numDistricts;
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      districtInfo[i] = {
-        id: i,
-        name: this.districtName(i),
-        size: 0,
-      };
+      districtInfo[i] = {id: i, size: 0};
     }
     precincts.forEach((p, i) => {
       const district = precinctStates[i];
@@ -32,6 +20,7 @@ class DataTable extends Component {
       }
     });
 
+    // TODO: block for overall stats
     return <div className="data-container">
       {Object.values(districtInfo).map(
           info => <DistrictData key={info.id} {...info} />)}

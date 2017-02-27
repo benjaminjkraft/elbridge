@@ -1,32 +1,40 @@
 import React, { Component, PropTypes } from 'react';
+import DistrictData from './DistrictData';
 
 class DataTable extends Component {
+  districtName(id) {
+    if (id === 0) {
+      return "Unassigned";
+    } else {
+      return `District ${id}`;
+    }
+  }
+
   render() {
     const {numDistricts, precincts, precinctStates} = this.props;
     const idealSize = precinctStates.length / numDistricts;
 
     const districtInfo = {};
+    for (let i = 0 ; i <= numDistricts ; i++) {
+      districtInfo[i] = {
+        id: i,
+        name: this.districtName(i),
+        size: 0,
+      };
+    }
     precincts.forEach((p, i) => {
-        const district = precinctStates[i];
-        districtInfo[district] = districtInfo[district] || {
-            size: 0,
-            parties: {R: 0, D: 0}
-        };
-        districtInfo[district].size += 1;
-        if (p.party) {
-            districtInfo[district].parties[p.party] += 1;
-        }
+      const district = precinctStates[i];
+      const info = districtInfo[district];
+      info.size += 1;
+      if (p.party) {
+        info.parties = info.parties || {R: 0, D: 0};
+        info.parties[p.party] += 1;
+      }
     });
 
     return <div className="data-container">
-      {Object.entries(districtInfo).map(
-        ([d, info]) => <span key={d} className="data-line">
-          {d === "0" ?
-            `Unassigned: ${info.size}` :
-            `District ${d}: ${info.size}/${idealSize}`}
-          {d !== "0" && (info.parties.R || info.parties.D) ? /* TODO: colors */
-            `; ${info.parties.R} red/${info.parties.D} blue` : null}
-        </span>)}
+      {Object.values(districtInfo).map(
+          info => <DistrictData key={info.id} {...info} />)}
     </div>;
   }
 }

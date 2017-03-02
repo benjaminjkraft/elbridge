@@ -10,10 +10,10 @@ test:
 	yarnpkg run test
 
 src/data/GridMap.js: $(MAP_SCRIPT)
-	$< grid 5 6 >$@
+	$< grid 5 6 6 >$@
 
 src/data/UnevenMap.js: $(MAP_SCRIPT)
-	$< uneven 4 4 30 >$@
+	$< uneven 4 4 30 6 >$@
 
 maps: src/data/GridMap.js src/data/UnevenMap.js
 

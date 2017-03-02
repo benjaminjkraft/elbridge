@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import Map from './Map';
-import BaseMapData from  './data/BaseMap';
+import UnevenMapData from  './data/UnevenMap';
 
 class App extends Component {
   render() {
-    return <Map scale={100} width={4} height={6} numDistricts={4}
-                precincts={BaseMapData}/>
+    return <Map scale={100} width={4} height={4} numDistricts={6}
+                precincts={UnevenMapData}/>
   }
 }
 

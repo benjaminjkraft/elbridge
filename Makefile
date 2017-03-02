@@ -1,3 +1,5 @@
+MAP_SCRIPT=src/data/make_random_map.py
+
 serve:
 	yarnpkg start
 
@@ -7,7 +9,12 @@ build:
 test:
 	yarnpkg run test
 
-src/data/BaseMap.js: src/data/make_random_map.py
-	src/data/make_random_map.py 4 6 >src/data/BaseMap.js
+src/data/GridMap.js: $(MAP_SCRIPT)
+	$< grid 5 6 >$@
 
-maps: src/data/BaseMap.js
+src/data/UnevenMap.js: $(MAP_SCRIPT)
+	$< uneven 4 4 30 >$@
+
+maps: src/data/GridMap.js src/data/UnevenMap.js
+
+.PHONY: serve build test

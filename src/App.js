@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import Map from './Map';
-import UnevenMapData from  './data/UnevenMap';
+import MapData from  './data/DotsFirstMap';
 
 class App extends Component {
   render() {
-    return <Map scale={100} {...UnevenMapData} />
+    return <Map scale={100} {...MapData} />
   }
 }
 

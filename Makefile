@@ -15,6 +15,7 @@ src/data/GridMap.js: $(MAP_SCRIPT)
 src/data/UnevenMap.js: $(MAP_SCRIPT)
 	$< uneven 4 4 30 6 >$@
 
-maps: src/data/GridMap.js src/data/UnevenMap.js
+src/data/DotsFirstMap.js: $(MAP_SCRIPT)
+	$< dots_first 4 6 30 6 >$@
 
 .PHONY: serve build test

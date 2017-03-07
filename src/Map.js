@@ -6,7 +6,14 @@ class Map extends Component {
   constructor(props) {
     super(props);
     const {precincts} = this.props;
-    this.state = {precinctStates: Array(precincts.length).fill(0)};
+    this.state = this.initialState(props)
+  }
+
+  initialState(props) {
+    return {
+      precinctStates: props.precincts.map(_ => 0),
+      draggingDistrict: null,
+    };
   }
 
   setPrecinctDistrict(index, district) {
@@ -51,6 +58,10 @@ class Map extends Component {
     this.setState({draggingDistrict: null});
   }
 
+  reset() {
+    this.setState(this.initialState(this.props));
+  }
+
   render() {
     const {scale, width, height, numDistricts, precincts} = this.props;
 
@@ -71,7 +82,8 @@ class Map extends Component {
         </div>
         <DataTable numDistricts={numDistricts}
                    precincts={this.props.precincts}
-                   precinctStates={this.state.precinctStates} />
+                   precinctStates={this.state.precinctStates} 
+                   handleReset={this.reset.bind(this)} />
       </div>
     );
   }

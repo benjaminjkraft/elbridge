@@ -3,12 +3,15 @@ import DistrictData from './DistrictData';
 
 class DataTable extends Component {
   render() {
-    const {numDistricts, precincts, precinctStates} = this.props;
-    const idealSize = precinctStates.length / numDistricts;
+    const {numDistricts, precincts, precinctStates, handleReset} = this.props;
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      districtInfo[i] = {id: i, size: 0};
+      const info = {id: i, size: 0};
+      if (i) {
+        info.idealSize = precinctStates.length / numDistricts;
+      }
+      districtInfo[i] = info;
     }
     precincts.forEach((p, i) => {
       const district = precinctStates[i];
@@ -24,6 +27,9 @@ class DataTable extends Component {
     return <div className="data-container">
       {Object.values(districtInfo).map(
           info => <DistrictData key={info.id} {...info} />)}
+      <div className="district-data district-data-name" onClick={handleReset}>
+        Reset
+      </div>
     </div>;
   }
 }

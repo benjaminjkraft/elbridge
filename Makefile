@@ -16,6 +16,9 @@ src/data/UnevenMap.js: $(MAP_SCRIPT)
 	$< uneven 4 4 30 6 >$@
 
 src/data/DotsFirstMap.js: $(MAP_SCRIPT)
-	$< dots_first 4 6 30 6 >$@
+	$< dots_first 4 6 30 6 6 >$@
+
+src/data/SingleCityMap.js: $(MAP_SCRIPT)
+	$< single_city 4 6 30 6 10 0.5 0.2 >$@
 
 .PHONY: serve build test

@@ -60,6 +60,51 @@ def make_uneven_map(width, height, num_precincts, num_districts):
     }
 
 
+def get_split(n):
+    if n < 2:
+        raise ValueError
+    return n - random.randrange(int(math.ceil(n / 3.)), n / 2 + 1)
+
+
+def split_list(l, index, res):
+    """Split l into two parts, sorted by index'th item, multiple of res."""
+    l.sort(key=lambda i: i[index])
+    left_size = get_split(len(l) / res) * res
+    cutpoint = (l[left_size - 1][index] + l[left_size][index]) / 2.
+    return cutpoint, l[:left_size], l[left_size:]
+
+
+def make_precincts_from_chunks(chunks, res=DOTS_PER_CELL):
+    """Make precincts from a list of chunks and dots.
+
+    Takes a list of chunks, each of which should be (x, y, dx, dy, dots), with
+    a multiple of 'res' dots; returns a list of the same, with exactly 'res'
+    dots in each chunk.
+
+    TODO: fuzz dots near boundary inwards.
+    """
+    final_chunks = []
+    while chunks:
+        next_chunks = []
+        for chunk in chunks:
+            x, y, dx, dy, dots = chunk
+            if len(dots) == res:
+                final_chunks.append(chunk)
+                continue
+            if dx < dy or dx == dy and random.randrange(2):
+                cut, left, right = split_list(dots, 1, res)
+                next_chunks.extend([
+                    (x, y, dx, cut - y, left),
+                    (x, cut, dx, y + dy - cut, right)])
+            else:
+                cut, left, right = split_list(dots, 0, res)
+                next_chunks.extend([
+                    (x, y, cut - x, dy, left),
+                    (cut, y, x + dx - cut, dy, right)])
+        chunks = next_chunks
+    return final_chunks
+
+
 def factor_evenly(n):
     """Factor n into a * b with a and b kinda close, if possible."""
     sqrt_n = int(math.sqrt(n))
@@ -69,6 +114,13 @@ def factor_evenly(n):
     return None
 
 
+def choose_factorable_num(n, maximum):
+    for i in xrange(maximum, 0, -1):
+        factors = factor_evenly(i)  # guaranteed to work for i=1
+        if factors:
+            return i, factors
+
+
 def divide_unevenly(n, k):
     """Return a list with sum n, k elements, all approximately equal."""
     retval = [n / k + (i < n % k) for i in xrange(k)]
@@ -76,25 +128,12 @@ def divide_unevenly(n, k):
     return retval
 
 
-def split_list(l, index, res):
-    """Split l into two parts, sorted by index'th item, multiple of res."""
-    l.sort(key=lambda i: i[index])
-    left_size = len(l) / res / 2 * res
-    cutpoint = (l[left_size - 1][index] + l[left_size][index]) / 2.
-    return cutpoint, l[:left_size], l[left_size:]
-
-
 def make_dots_first_map(width, height, num_precincts, num_districts,
-                        chunk_size_min=6):
-    num_chunks_max = num_precincts / chunk_size_min
-    for i in xrange(num_chunks_max, 0, -1):
-        factors = factor_evenly(i)  # guaranteed to work for i=1
-        if factors:
-            a, b = factors
-            num_chunks = i
-            break
+                        chunk_size_min):
+    num_chunks, (a, b) = choose_factorable_num(
+        num_precincts, num_precincts / chunk_size_min)
     precincts_per_chunk = divide_unevenly(num_precincts, num_chunks)
-    groups = []
+    chunks = []
     dx = width / float(a)
     dy = height / float(b)
     for i in xrange(a):
@@ -104,27 +143,47 @@ def make_dots_first_map(width, height, num_precincts, num_districts,
                 ((i + random.randrange(*BOUNDS) / float(RESOLUTION)) * dx,
                  (j + random.randrange(*BOUNDS) / float(RESOLUTION)) * dy)
                 for _ in xrange(DOTS_PER_CELL * chunk_size)]
-            groups.append((i * dx, j * dy, dx, dy, dots))
-    precincts = []
-    while groups:
-        next_groups = []
-        for group in groups:
-            x, y, dx, dy, dots = group
-            if len(dots) == DOTS_PER_CELL:
-                precincts.append(group)
-                continue
-            if dx < dy or dx == dy and random.randrange(2):
-                cut, left, right = split_list(dots, 1, DOTS_PER_CELL)
-                next_groups.extend([
-                    (x, y, dx, cut - y, left),
-                    (x, cut, dx, y + dy - cut, right)])
-            else:
-                cut, left, right = split_list(dots, 0, DOTS_PER_CELL)
-                next_groups.extend([
-                    (x, y, cut - x, dy, left),
-                    (cut, y, x + dx - cut, dy, right)])
-        groups = next_groups
+            chunks.append((i * dx, j * dy, dx, dy, dots))
+    precincts = make_precincts_from_chunks(chunks)
     r_indexes = set(random.sample(xrange(len(precincts)), len(precincts) / 2))
+    return {
+        'width': width,
+        'height': height,
+        'numDistricts': num_districts,
+        'precincts': [{
+            'x': x, 'y': y, 'width': dx, 'height': dy,
+            'party': 'R' if index in r_indexes else 'D',
+            'dots': [{'x': i, 'y': j} for i, j in dots],
+        } for index, (x, y, dx, dy, dots) in enumerate(precincts)]  # noqa: F812
+    }
+
+
+def clamp(val, low, high):
+    return min(high, max(low, val))
+
+
+def make_single_city_map(width, height, num_precincts, num_districts,
+                         city_precincts, city_size, city_r):
+    base_dots = [
+        ((random.randrange(*BOUNDS) / float(RESOLUTION)) * width,
+         (random.randrange(*BOUNDS) / float(RESOLUTION)) * height)
+        for _ in xrange(DOTS_PER_CELL * (num_precincts - city_precincts))]
+    city_dots = [
+        (clamp(random.gauss(width / 2., city_size), 0, width),
+         clamp(random.gauss(height / 2., city_size), 0, height))
+        for _ in xrange(DOTS_PER_CELL * city_precincts)]
+    precincts = make_precincts_from_chunks(
+        [(0, 0, float(width), float(height), base_dots + city_dots)])
+
+    def dist_from_center(precinct):
+        x, y, dx, dy, _ = precinct
+        return (x + dx / 2 - width / 2) ** 2 + (y + dy / 2 - height / 2) ** 2
+
+    precincts.sort(key=dist_from_center)
+    city_r_count = int(city_precincts * city_r)
+    r_indexes = (set(random.sample(xrange(city_precincts), city_r_count))
+                 | set(random.sample(xrange(city_precincts, num_precincts),
+                                     num_precincts / 2 - city_r_count)))
     return {
         'width': width,
         'height': height,
@@ -143,7 +202,8 @@ def echo_map(m):
 
 def main(map_type, args):
     map_maker = globals()['make_%s_map' % map_type]
-    echo_map(map_maker(*map(int, args)))
+    echo_map(map_maker(*[float(arg) if '.' in arg else int(arg)
+                         for arg in args]))
 
 
 if __name__ == '__main__':

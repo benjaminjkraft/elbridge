@@ -9,7 +9,7 @@ class DataTable extends Component {
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      const info = {id: i, size: 0, parties: {R: 0, D: 0}};
+      const info = {id: i, size: 0, parties: {R: 0, D: 0}, precincts: []};
       if (i) {
         info.idealSize = precinctStates.length / numDistricts;
       }
@@ -20,6 +20,7 @@ class DataTable extends Component {
       const info = districtInfo[district];
       info.size += 1;
       info.parties[p.party] += 1;
+      info.precincts.push(p);  // TODO: inline stuff to use this directly
     });
 
     const winners = {R: 0, D: 0};

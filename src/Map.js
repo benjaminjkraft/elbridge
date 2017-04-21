@@ -32,7 +32,7 @@ class Map extends Component {
       }
       if (district <= 0) {
         district += this.props.numDistricts;
-      } else if (district >= this.props.numDistricts) {
+      } else if (district > this.props.numDistricts) {
         district -= this.props.numDistricts;
       }
       this.setPrecinctDistrict(index, district);

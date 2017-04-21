@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {districtColors, partyData} from './Constants';
+import {contiguous} from './util';
 
 class DistrictRow extends Component {
   districtName(id) {
@@ -11,9 +12,10 @@ class DistrictRow extends Component {
   }
 
   render () {
-    const {id, size, idealSize, parties, winner} = this.props;
+    const {id, size, idealSize, parties, winner, precincts} = this.props;
     let correct = true;
     if (idealSize) {
+      correct = correct && contiguous(precincts);
       correct = correct && size === idealSize;
     } else {
       correct = correct && size === 0;

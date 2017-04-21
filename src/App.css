@@ -17,9 +17,14 @@
 
 .district-data {
     border-collapse: collapse;
+    border: 1px solid #ccc;
     padding: 10px;
     margin: 10px;
     vertical-align: top;
+}
+
+.district-data thead {
+    border-bottom: 1px solid #ccc;
 }
 
 .district-data td, .district-data th {

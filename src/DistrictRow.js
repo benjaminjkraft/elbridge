@@ -12,8 +12,15 @@ class DistrictRow extends Component {
 
   render () {
     const {id, size, idealSize, parties, winner} = this.props;
-
+    let correct = true;
+    if (idealSize) {
+      correct = correct && size === idealSize;
+    } else {
+      correct = correct && size === 0;
+    }
     return <tr style={{backgroundColor: districtColors[id]}}>
+      {/* TODO: tooltip saying why */}
+      <td>{correct ? "✔" : "❌"}</td>
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}

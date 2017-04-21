@@ -35,6 +35,7 @@ class DataTable extends Component {
       <table className="district-data">
         <thead>
           <tr>
+            <th></th>
             <th>District</th>
             <th>Precincts</th>
             <th>Winner</th>

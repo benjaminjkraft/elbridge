@@ -15,7 +15,7 @@
     vertical-align: top;
 }
 
-.district-data {
+.data-container table{
     border-collapse: collapse;
     border: 1px solid #ccc;
     padding: 10px;
@@ -23,11 +23,11 @@
     vertical-align: top;
 }
 
-.district-data thead {
+.data-container thead {
     border-bottom: 1px solid #ccc;
 }
 
-.district-data td, .district-data th {
+.data-container td, .data-container th {
     padding: 2px 5px;
     margin: 0px;
 }

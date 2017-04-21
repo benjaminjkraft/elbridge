@@ -11,22 +11,14 @@ class DistrictRow extends Component {
   }
 
   render () {
-    const {id, size, idealSize, parties} = this.props;
-    var winner;
-    if (parties && id !== 0) {
-      if (parties.R > parties.D) {
-        winner = partyData.R.name;
-      } else if (parties.D > parties.R) {
-        winner = partyData.D.name;
-      } else {
-        winner = 'tie';
-      }
-    }
+    const {id, size, idealSize, parties, winner} = this.props;
+
     return <tr style={{backgroundColor: districtColors[id]}}>
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
-      <td>{winner || ""}</td>
+      <td>{winner === undefined ? "" :
+           winner === null ? "tie" : partyData[winner].name}</td>
       <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
     </tr>
   }
@@ -37,6 +29,7 @@ DistrictRow.propTypes = {
   size: PropTypes.number.isRequired,
   idealSize: PropTypes.number,
   parties: PropTypes.objectOf(PropTypes.number),
+  winner: PropTypes.string,
 }
 
 export default DistrictRow;

@@ -3,7 +3,7 @@ import DistrictRow from './DistrictRow';
 
 class DataTable extends Component {
   render() {
-    const {numDistricts, precincts, precinctStates, handleReset} = this.props;
+    const {numDistricts, precincts, precinctStates} = this.props;
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {

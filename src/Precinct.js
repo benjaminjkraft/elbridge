@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import {districtColors, partyColors} from './Constants';
+import {districtColors, partyData} from './Constants';
 
 class Precinct extends Component {
   renderDots(dots, party) {
-    const color = partyColors[party || 0];
+    const color = party ? partyData[party].color: "black";
     return dots && dots.map(({x, y}, i) => <circle fill={color} key={i} cx={x} cy={y} r={0.03} />);
   }
 

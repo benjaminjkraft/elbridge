@@ -8,15 +8,15 @@ const districtColors = {
   6: "#a8ffff",
 };
 
-const partyColors = {
-  0: "black",
-  R: "red",
-  D: "blue",
+const partyData = {
+  R: {
+    name: "Red",
+    color: "red",
+  },
+  D: {
+    name: "Blue",
+    color: "blue",
+  },
 };
 
-const partyNames = {
-  R: "Red",
-  D: "Blue",
-};
-
-export {districtColors, partyColors, partyNames};
+export {districtColors, partyData};

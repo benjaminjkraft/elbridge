@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {districtColors, partyNames} from './Constants';
+import {districtColors, partyData} from './Constants';
 
 class DistrictRow extends Component {
   districtName(id) {
@@ -15,9 +15,9 @@ class DistrictRow extends Component {
     var winner;
     if (parties && id !== 0) {
       if (parties.R > parties.D) {
-        winner = partyNames.R;
+        winner = partyData.R.name;
       } else if (parties.D > parties.R) {
-        winner = partyNames.D;
+        winner = partyData.D.name;
       } else {
         winner = 'tie';
       }
@@ -27,7 +27,7 @@ class DistrictRow extends Component {
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
       <td>{winner || ""}</td>
-      <td>{parties.R} {partyNames.R}/{parties.D} {partyNames.D}</td>
+      <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
     </tr>
   }
 }

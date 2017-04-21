@@ -5,7 +5,6 @@ import DataTable from './DataTable';
 class Map extends Component {
   constructor(props) {
     super(props);
-    const {precincts} = this.props;
     this.state = this.initialState(props)
   }
 

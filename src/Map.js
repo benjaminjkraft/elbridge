@@ -79,11 +79,15 @@ class Map extends Component {
                         onMouseUp={this.makePrecinctMouseUpHandler(i)} />)}
 
           </svg>
+          <div className="map-buttons">
+            <button onClick={this.reset.bind(this)}>
+              Reset
+            </button>
+          </div>
         </div>
         <DataTable numDistricts={numDistricts}
                    precincts={this.props.precincts}
-                   precinctStates={this.state.precinctStates} 
-                   handleReset={this.reset.bind(this)} />
+                   precinctStates={this.state.precinctStates} />
       </div>
     );
   }

@@ -26,3 +26,10 @@
     padding: 2px 5px;
     margin: 0px;
 }
+
+.map-buttons button {
+    background-color: white;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    padding: 2px 6px;
+}

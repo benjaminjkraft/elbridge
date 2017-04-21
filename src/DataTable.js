@@ -36,9 +36,6 @@ class DataTable extends Component {
           info => <DistrictRow key={info.id} {...info} />)}
         </tbody>
       </table>
-      <div className="district-data district-data-name" onClick={handleReset}>
-        Reset
-      </div>
     </div>;
   }
 }

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {districtColors, partyNames} from './Constants';
 
-class DistrictData extends Component {
+class DistrictRow extends Component {
   districtName(id) {
     if (id === 0) {
       return "Unassigned";
@@ -22,24 +22,21 @@ class DistrictData extends Component {
         winner = 'tie';
       }
     }
-    return <div className="district-data"
-                style={{backgroundColor: districtColors[id]}}>
-      <div className="district-data-name">{this.districtName(id)}</div>
-      <div>Precincts: {size}{idealSize && `/${idealSize}`}</div>
+    return <tr style={{backgroundColor: districtColors[id]}}>
+      <th>{this.districtName(id)}</th>
+      <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
-      {parties && <div>
-        Party ID: {parties.R} {partyNames.R}/{parties.D} {partyNames.D}
-        </div>}
-      {winner && <div>Winner: {winner}</div>}
-    </div>
+      <td>{winner || ""}</td>
+      <td>{parties.R} {partyNames.R}/{parties.D} {partyNames.D}</td>
+    </tr>
   }
 }
 
-DistrictData.propTypes = {
+DistrictRow.propTypes = {
   id: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   idealSize: PropTypes.number,
   parties: PropTypes.objectOf(PropTypes.number),
 }
 
-export default DistrictData;
+export default DistrictRow;

@@ -16,15 +16,13 @@
 }
 
 .district-data {
-    display: inline-block;
-    border: 1px solid #ccc;
+    border-collapse: collapse;
     padding: 10px;
     margin: 10px;
     vertical-align: top;
 }
 
-.district-data-name {
-    text-align: center;
-    font-weight: bold;
-    padding-bottom: 5px;
+.district-data td, .district-data th {
+    padding: 2px 5px;
+    margin: 0px;
 }

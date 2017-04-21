@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import DistrictData from './DistrictData';
+import DistrictRow from './DistrictRow';
 
 class DataTable extends Component {
   render() {
@@ -7,7 +7,7 @@ class DataTable extends Component {
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      const info = {id: i, size: 0};
+      const info = {id: i, size: 0, parties: {R: 0, D: 0}};
       if (i) {
         info.idealSize = precinctStates.length / numDistricts;
       }
@@ -17,16 +17,25 @@ class DataTable extends Component {
       const district = precinctStates[i];
       const info = districtInfo[district];
       info.size += 1;
-      if (p.party) {
-        info.parties = info.parties || {R: 0, D: 0};
-        info.parties[p.party] += 1;
-      }
+      info.parties[p.party] += 1;
     });
 
     // TODO: block for overall stats
     return <div className="data-container">
-      {Object.values(districtInfo).map(
-          info => <DistrictData key={info.id} {...info} />)}
+      <table className="district-data">
+        <thead>
+          <tr>
+            <th>District</th>
+            <th>Precincts</th>
+            <th>Winner</th>
+            <th>Party ID</th>
+          </tr>
+        </thead>
+        <tbody>
+        {Object.values(districtInfo).map(
+          info => <DistrictRow key={info.id} {...info} />)}
+        </tbody>
+      </table>
       <div className="district-data district-data-name" onClick={handleReset}>
         Reset
       </div>

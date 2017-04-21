@@ -23,16 +23,20 @@ class Map extends Component {
   }
 
   makePrecinctMouseDownHandler(index) {
-    return () => {
-      const oldDistrict = this.state.precinctStates[index];
-      let newDistrict;
-      if (!oldDistrict || oldDistrict >= this.props.numDistricts) {
-        newDistrict = 1;
-      } else {
-        newDistrict = oldDistrict + 1;
+    return (ev) => {
+      let district = this.state.precinctStates[index];
+      if (ev.button === 0) {
+        district = district ? district + 1 : 1;
+      } else if (ev.button === 2) {
+        district = district ? district - 1 : 0;
       }
-      this.setPrecinctDistrict(index, newDistrict);
-      this.setState({draggingDistrict: newDistrict});
+      if (district <= 0) {
+        district += this.props.numDistricts;
+      } else if (district >= this.props.numDistricts) {
+        district -= this.props.numDistricts;
+      }
+      this.setPrecinctDistrict(index, district);
+      this.setState({draggingDistrict: district});
     }
   }
 
@@ -75,7 +79,8 @@ class Map extends Component {
                         district={this.state.precinctStates[i] || 0}
                         onMouseDown={this.makePrecinctMouseDownHandler(i)}
                         onMouseEnter={this.makePrecinctMouseEnterHandler(i)}
-                        onMouseUp={this.makePrecinctMouseUpHandler(i)} />)}
+                        onMouseUp={this.makePrecinctMouseUpHandler(i)}
+                        onContextMenu={event => event.preventDefault()} />)}
 
           </svg>
           <div className="map-buttons">

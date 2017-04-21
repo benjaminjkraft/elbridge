@@ -4,6 +4,7 @@ import {districtColors, partyData} from './Constants';
 class Precinct extends Component {
   renderDots(dots, party) {
     const color = party ? partyData[party].color: "black";
+    // TODO(benkraft): make dots clickable too
     return dots && dots.map(({x, y}, i) => <circle fill={color} key={i} cx={x} cy={y} r={0.03} />);
   }
 

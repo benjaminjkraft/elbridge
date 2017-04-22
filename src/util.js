@@ -59,4 +59,19 @@ function contiguous(precincts) {
   return found.every(x => x);
 }
 
-export {winner, contiguous};
+function parseQs(data) {
+  if (data[0] === '#' || data[0] === '?') {
+    data = data.slice(1);
+  }
+  const retval = {};
+  for (let item of data.split('&')) {
+    let ix = item.indexOf('=');
+    if (ix !== -1) {
+      retval[decodeURIComponent(item.slice(0, ix))] = decodeURIComponent(
+          item.slice(ix + 1));
+    }
+  }
+  return retval;
+}
+
+export {winner, contiguous, parseQs};

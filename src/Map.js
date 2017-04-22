@@ -1,14 +1,25 @@
 import React, { Component, PropTypes } from 'react';
 import Precinct from './Precinct';
 import DataTable from './DataTable';
+import {parseQs} from './util';
 
 class Map extends Component {
   constructor(props) {
     super(props);
     this.state = this.initialState(props)
+    window.onhashchange = () => this.setState(this.initialState(this.props));
   }
 
   initialState(props) {
+    try {
+      const qs = parseQs(document.location.hash.slice(1));
+      if (qs.save) {
+        // TODO: Validate before using
+        return JSON.parse(atob(qs.save));
+      }
+    } catch (e) {
+      console.error(e);
+    }
     return {
       precinctStates: props.precincts.map(_ => 0),
       draggingDistrict: null,
@@ -65,6 +76,10 @@ class Map extends Component {
     this.setState(this.initialState(this.props));
   }
 
+  save() {
+    document.location.hash = `save=${btoa(JSON.stringify(this.state))}`;
+  }
+
   render() {
     const {scale, width, height, numDistricts, precincts} = this.props;
 
@@ -86,6 +101,9 @@ class Map extends Component {
           <div className="map-buttons">
             <button onClick={this.reset.bind(this)}>
               Reset
+            </button>
+            <button onClick={this.save.bind(this)}>
+              Save
             </button>
           </div>
         </div>

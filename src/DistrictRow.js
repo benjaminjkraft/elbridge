@@ -13,16 +13,23 @@ class DistrictRow extends Component {
 
   render () {
     const {id, size, idealSize, parties, winner, precincts} = this.props;
-    let correct = true;
+    let incorrectReason;
     if (idealSize) {
-      correct = correct && contiguous(precincts);
-      correct = correct && size === idealSize;
+      if (!contiguous(precincts)) {
+        incorrectReason = "District is not contiguous";
+      } else if (size > idealSize) {
+        incorrectReason = "District too large";
+      } else if (size < idealSize) {
+        incorrectReason = "District too small";
+      }
     } else {
-      correct = correct && size === 0;
+      if (size !== 0) {
+        incorrectReason = "Not all precincts assigned";
+      }
     }
     return <tr style={{backgroundColor: districtColors[id]}}>
       {/* TODO: tooltip saying why */}
-      <td>{correct ? "✔" : "❌"}</td>
+      <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}

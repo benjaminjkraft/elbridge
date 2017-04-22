@@ -13,19 +13,19 @@ class DistrictRow extends Component {
   }
 
   render () {
-    const {id, size, idealSize, parties, winner, precincts} = this.props;
+    const {id, idealSize, parties, winner, precincts} = this.props;
 
     let incorrectReason;
     if (idealSize) {
       if (!contiguous(precincts)) {
         incorrectReason = "District is not contiguous";
-      } else if (size > idealSize) {
+      } else if (precincts.length > idealSize) {
         incorrectReason = "District too large";
-      } else if (size < idealSize) {
+      } else if (precincts.length < idealSize) {
         incorrectReason = "District too small";
       }
     } else {
-      if (size !== 0) {
+      if (precincts.length !== 0) {
         incorrectReason = "Not all precincts assigned";
       }
     }
@@ -34,7 +34,7 @@ class DistrictRow extends Component {
       {/* TODO: maybe a fancier tooltip */}
       <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
-      <td>{size}{idealSize && `/${idealSize}`}</td>
+      <td>{precincts.length}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
       <td><Winner winner={winner} /></td>
       <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
@@ -44,10 +44,11 @@ class DistrictRow extends Component {
 
 DistrictRow.propTypes = {
   id: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
   idealSize: PropTypes.number,
   parties: PropTypes.objectOf(PropTypes.number),
   winner: PropTypes.string,
+  // TODO: more precise type
+  precincts: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default DistrictRow;

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import DistrictRow from './DistrictRow';
-import {partyData} from './Constants';
 import {winner} from './util';
 import Winner from  './Winner';
 
@@ -19,9 +18,8 @@ class DataTable extends Component {
     precincts.forEach((p, i) => {
       const district = precinctStates[i];
       const info = districtInfo[district];
-      info.size += 1;
       info.parties[p.party] += 1;
-      info.precincts.push(p);  // TODO: inline stuff to use this directly
+      info.precincts.push(p);
     });
 
     const winners = {R: 0, D: 0};

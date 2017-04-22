@@ -17,6 +17,6 @@ class Winner extends Component {
   }
 }
 
-Winner.propTypes = {winner: PropTypes.string.isRequired};
+Winner.propTypes = {winner: PropTypes.string};
 
 export default Winner

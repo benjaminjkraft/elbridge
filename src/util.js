@@ -33,7 +33,6 @@ function contiguous(precincts) {
   if (precincts.length <= 1) {
     return true;  // vacuously
   }
-  console.log(precincts);
 
   // Build an adjacency list
   const adjacency = Array.from(precincts, () => []);

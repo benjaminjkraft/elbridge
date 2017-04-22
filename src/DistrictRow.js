@@ -13,6 +13,7 @@ class DistrictRow extends Component {
 
   render () {
     const {id, size, idealSize, parties, winner, precincts} = this.props;
+
     let incorrectReason;
     if (idealSize) {
       if (!contiguous(precincts)) {
@@ -27,14 +28,21 @@ class DistrictRow extends Component {
         incorrectReason = "Not all precincts assigned";
       }
     }
+
     return <tr style={{backgroundColor: districtColors[id]}}>
       {/* TODO: maybe a fancier tooltip */}
       <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
-      <td>{winner === undefined ? "" :
-           winner === null ? "tie" : partyData[winner].name}</td>
+      <td>
+        {winner !== undefined &&
+          <span style={{color: winner ? partyData[winner].color : "black"}}>
+            ⚫
+          </span>}
+        {winner === undefined ? "" : winner === null ? "Tie" :
+          partyData[winner].name}
+      </td>
       <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
     </tr>
   }

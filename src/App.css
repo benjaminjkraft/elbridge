@@ -1,26 +1,26 @@
 .container {
-    padding: 10px;
 }
 
 .map-container, .data-container {
     display: inline-block;
     max-width: 50%;
+    margin: 10px;
 }
 
 .map-container {
     user-select: none;
+    margin-right: 0px;
 }
 
 .data-container {
     vertical-align: top;
 }
 
-.data-container table{
+.data-container table {
     border-collapse: collapse;
     border: 1px solid #ccc;
-    padding: 10px;
-    margin: 10px;
     vertical-align: top;
+    margin-bottom: 10px;
 }
 
 .data-container thead {

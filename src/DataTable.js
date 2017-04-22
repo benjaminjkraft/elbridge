@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import DistrictRow from './DistrictRow';
 import {partyData} from './Constants';
 import {winner} from './util';
+import Winner from  './Winner';
 
 class DataTable extends Component {
   render() {
@@ -52,7 +53,7 @@ class DataTable extends Component {
         <tbody>
           <tr>
             <th>Winner</th>
-            <td>{overallWinner ? partyData[overallWinner].name : "tie"}</td>
+            <td><Winner winner={overallWinner} /></td>
           </tr>
           {/* TODO: more stats here */}
         </tbody>

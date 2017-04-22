@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {districtColors, partyData} from './Constants';
 import {contiguous} from './util';
+import Winner from './Winner';
 
 class DistrictRow extends Component {
   districtName(id) {
@@ -35,14 +36,7 @@ class DistrictRow extends Component {
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
-      <td>
-        {winner !== undefined &&
-          <span style={{color: winner ? partyData[winner].color : "black"}}>
-            ⚫
-          </span>}
-        {winner === undefined ? "" : winner === null ? "Tie" :
-          partyData[winner].name}
-      </td>
+      <td><Winner winner={winner} /></td>
       <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
     </tr>
   }

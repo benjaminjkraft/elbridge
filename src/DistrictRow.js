@@ -28,7 +28,7 @@ class DistrictRow extends Component {
       }
     }
     return <tr style={{backgroundColor: districtColors[id]}}>
-      {/* TODO: tooltip saying why */}
+      {/* TODO: maybe a fancier tooltip */}
       <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
       <td>{size}{idealSize && `/${idealSize}`}</td>

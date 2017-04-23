@@ -9,8 +9,11 @@ class Precinct extends Component {
   }
 
   render() {
-    const {district, dots, party, ...props} = this.props;
-    return <g>
+    const {
+        district, dots, party,
+        onMouseDown, onMouseEnter, onMouseUp, onContextMenu,
+        ...props} = this.props;
+    return <g {...{onMouseDown, onMouseEnter, onMouseUp, onContextMenu}}>
       <rect stroke="black" strokeWidth="0.01" fill={districtColors[district]} {...props} />
       {this.renderDots(dots, party)}
     </g>;
@@ -28,6 +31,10 @@ Precinct.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
   })),
+  onMouseDown: PropTypes.func.isRequired,
+  onMouseEnter: PropTypes.func.isRequired,
+  onMouseUp: PropTypes.func.isRequired,
+  onContextMenu: PropTypes.func.isRequired,
 };
 
 export default Precinct;

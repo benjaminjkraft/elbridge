@@ -1,29 +1,33 @@
 import React, { Component, PropTypes } from 'react';
 import Precinct from './Precinct';
 import DataTable from './DataTable';
-import {parseQs} from './util';
 
 class Map extends Component {
   constructor(props) {
     super(props);
-    this.state = this.initialState(props)
-    window.onhashchange = () => this.setState(this.initialState(this.props));
+    this.state = this.initialState(props);
   }
 
-  initialState(props) {
-    try {
-      const qs = parseQs(document.location.hash.slice(1));
-      if (qs.save) {
-        // TODO: Validate before using
-        return JSON.parse(atob(qs.save));
-      }
-    } catch (e) {
-      console.error(e);
-    }
+  blankState(props) {
     return {
       precinctStates: props.precincts.map(_ => 0),
       draggingDistrict: null,
     };
+  }
+
+  initialState(props) {
+    if (props.save) {
+      try {
+        return JSON.parse(atob(props.save));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return this.blankState(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(this.initialState(nextProps));
   }
 
   setPrecinctDistrict(index, district) {
@@ -73,11 +77,11 @@ class Map extends Component {
   }
 
   reset() {
-    this.setState(this.initialState(this.props));
+    this.setState(this.blankState(this.props));
   }
 
   save() {
-    document.location.hash = `save=${btoa(JSON.stringify(this.state))}`;
+    this.props.onSave(btoa(JSON.stringify(this.state)));
   }
 
   render() {
@@ -121,6 +125,8 @@ Map.PropTypes = {
   height: PropTypes.number.isRequired,
   numDistricts: PropTypes.number.isRequired,
   precincts: PropTypes.arrayOf(Precinct.PropTypes),
+  save: PropTypes.string,
+  onSave: PropTypes.func.isRequired,
 };
 
 

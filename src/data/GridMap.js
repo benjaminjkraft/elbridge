@@ -1,3 +1,4 @@
+// src/data/make_random_map.py grid 5 6 6
 export default {
   "height": 6, 
   "numDistricts": 6, 

@@ -9,6 +9,11 @@ RESOLUTION = 100
 MARGIN = 0.05
 BOUNDS = (int(RESOLUTION * MARGIN), RESOLUTION - int(RESOLUTION * MARGIN) + 1)
 
+MAP_FILE_TEMPLATE = """\
+// %(cmd)s
+export default %(json)s;
+"""
+
 
 def make_cell(x, y, dx, dy, party):
     return {
@@ -162,6 +167,20 @@ def clamp(val, low, high):
     return min(high, max(low, val))
 
 
+def fuzzy_clamp(val, low, high, margin):
+    clamped = clamp(val, low + margin, high - margin)
+    return clamped + (2 * random.random() - 1) * margin
+
+
+def fudge_dots(precinct, margin=MARGIN):
+    x, y, dx, dy, dots = precinct
+    new_dots = [
+        (fuzzy_clamp(a, x + margin * dx, x + (1 - margin) * dx, margin * dx),
+         fuzzy_clamp(b, y + margin * dy, y + (1 - margin) * dy, margin * dy))
+        for a, b in dots]
+    return x, y, dx, dy, new_dots
+
+
 def make_single_city_map(width, height, num_precincts, num_districts,
                          city_precincts, city_size, city_r):
     base_dots = [
@@ -172,8 +191,8 @@ def make_single_city_map(width, height, num_precincts, num_districts,
         (clamp(random.gauss(width / 2., city_size), 0, width),
          clamp(random.gauss(height / 2., city_size), 0, height))
         for _ in xrange(DOTS_PER_CELL * city_precincts)]
-    precincts = make_precincts_from_chunks(
-        [(0, 0, float(width), float(height), base_dots + city_dots)])
+    precincts = map(fudge_dots, make_precincts_from_chunks(
+        [(0, 0, float(width), float(height), base_dots + city_dots)]))
 
     def dist_from_center(precinct):
         x, y, dx, dy, _ = precinct
@@ -197,7 +216,10 @@ def make_single_city_map(width, height, num_precincts, num_districts,
 
 
 def echo_map(m):
-    print "export default %s" % json.dumps(m, indent=2, sort_keys=True)
+    print MAP_FILE_TEMPLATE % {
+        'cmd': ' '.join(sys.argv),
+        'json': json.dumps(m, indent=2, sort_keys=True),
+    }
 
 
 def main(map_type, args):

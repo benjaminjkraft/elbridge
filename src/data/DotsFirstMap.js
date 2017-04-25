@@ -1,3 +1,4 @@
+// src/data/make_random_map.py dots_first 4 6 30 6 6
 export default {
   "height": 6, 
   "numDistricts": 6, 

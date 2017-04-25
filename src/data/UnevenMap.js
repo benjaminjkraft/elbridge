@@ -1,3 +1,4 @@
+// src/data/make_random_map.py uneven 4 4 30 6
 export default {
   "height": 4, 
   "numDistricts": 6, 

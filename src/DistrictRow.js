@@ -36,8 +36,9 @@ class DistrictRow extends Component {
       <th>{this.districtName(id)}</th>
       <td>{precincts.length}{idealSize && `/${idealSize}`}</td>
       {/* TODO: colors; generalize */}
-      <td><Winner winner={winner} /></td>
-      <td>{parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>
+      {parties && <td><Winner winner={winner} /></td>}
+      {parties && <td>
+        {parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>}
     </tr>
   }
 }

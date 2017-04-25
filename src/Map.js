@@ -93,13 +93,15 @@ class Map extends Component {
           <svg className="map" width={width * scale} height={height * scale}
                viewBox={`0 0 ${width} ${height}`}
                onMouseLeave={this.handleMouseLeave.bind(this)}>
-            {precincts.map((precinct, i) =>
-              <Precinct key={[precinct.x, precinct.y]} {...precinct}
-                        district={this.state.precinctStates[i] || 0}
-                        onMouseDown={this.makePrecinctMouseDownHandler(i)}
-                        onMouseEnter={this.makePrecinctMouseEnterHandler(i)}
-                        onMouseUp={this.makePrecinctMouseUpHandler(i)}
-                        onContextMenu={event => event.preventDefault()} />)}
+            {precincts.map((precinct, i) => {
+              return <Precinct
+                key={[precinct.x, precinct.y]} {...precinct}
+                party={this.props.showParties ? precinct.party : undefined}
+                district={this.state.precinctStates[i] || 0}
+                onMouseDown={this.makePrecinctMouseDownHandler(i)}
+                onMouseEnter={this.makePrecinctMouseEnterHandler(i)}
+                onMouseUp={this.makePrecinctMouseUpHandler(i)}
+                onContextMenu={event => event.preventDefault()} />})}
 
           </svg>
           <div className="map-buttons">
@@ -113,6 +115,7 @@ class Map extends Component {
         </div>
         <DataTable numDistricts={numDistricts}
                    precincts={this.props.precincts}
+                   showParties={this.props.showParties}
                    precinctStates={this.state.precinctStates} />
       </div>
     );
@@ -127,6 +130,7 @@ Map.PropTypes = {
   precincts: PropTypes.arrayOf(Precinct.PropTypes),
   save: PropTypes.string,
   onSave: PropTypes.func.isRequired,
+  showParties: PropTypes.bool.isRequired,
 };
 
 

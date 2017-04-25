@@ -9,7 +9,10 @@ class DataTable extends Component {
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      const info = {id: i, size: 0, parties: {R: 0, D: 0}, precincts: []};
+      const info = {id: i, size: 0, precincts: []};
+      if (this.props.showParties) {
+        info.parties = {R: 0, D: 0};
+      }
       if (i) {
         info.idealSize = precinctStates.length / numDistricts;
       }
@@ -18,18 +21,24 @@ class DataTable extends Component {
     precincts.forEach((p, i) => {
       const district = precinctStates[i];
       const info = districtInfo[district];
-      info.parties[p.party] += 1;
+      if (this.props.showParties) {
+        info.parties[p.party] += 1;
+      }
       info.precincts.push(p);
     });
 
-    const winners = {R: 0, D: 0};
-    Object.values(districtInfo).forEach(info => {
-      if (info.id !== 0) {
-        info.winner = winner(info.parties);
-        winners[info.winner] += 1;
-      }
-    });
-    const overallWinner = winner(winners);
+    let winners;
+    let overallWinner;
+    if (this.props.showParties) {
+      winners = {R: 0, D: 0};
+      Object.values(districtInfo).forEach(info => {
+        if (info.id !== 0) {
+          info.winner = winner(info.parties);
+          winners[info.winner] += 1;
+        }
+      });
+      overallWinner = winner(winners);
+    }
 
     return <div className="data-container">
       <table className="district-data">
@@ -38,8 +47,8 @@ class DataTable extends Component {
             <th></th>
             <th>District</th>
             <th>Precincts</th>
-            <th>Winner</th>
-            <th>Party ID</th>
+            {winners && <th>Winner</th>}
+            {this.props.showParties && <th>Party ID</th>}
           </tr>
         </thead>
         <tbody>
@@ -47,7 +56,7 @@ class DataTable extends Component {
           info => <DistrictRow key={info.id} {...info} />)}
         </tbody>
       </table>
-      <table className="global-data">
+      {overallWinner && <table className="global-data">
         <tbody>
           <tr>
             <th>Winner</th>
@@ -55,13 +64,14 @@ class DataTable extends Component {
           </tr>
           {/* TODO: more stats here */}
         </tbody>
-      </table>
+      </table>}
     </div>;
   }
 }
 
 DataTable.propTypes = {
   numDistricts: PropTypes.number.isRequired,
+  showParties: PropTypes.bool.isRequired,
   precinctStates: PropTypes.arrayOf(PropTypes.number).isRequired
 }
 

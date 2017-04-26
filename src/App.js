@@ -19,7 +19,7 @@ class App extends Component {
         return {
           mapName: qs.mapName,
           mapSave: qs.mapSave,
-          showParties: qs.showParties == "true",
+          showParties: qs.showParties === "true",
         }
       }
     } catch (e) {

@@ -12,20 +12,18 @@ class App extends Component {
   }
 
   initialState(props) {
+    let qs;
     try {
-      let qs = parseQs(document.location.hash.slice(1));
-      // TODO: better merging of each prop's defaults
-      if (qs.mapName && MAPS[qs.mapName]) {
-        return {
-          mapName: qs.mapName,
-          mapSave: qs.mapSave,
-          showParties: qs.showParties === "true",
-        }
-      }
+      qs = parseQs(document.location.hash.slice(1));
     } catch (e) {
       console.error(e);
+      qs = {};
     }
-    return {mapName: DEFAULT, showParties: false};
+    return {
+      mapName: MAPS[qs.mapName] ? qs.mapName : DEFAULT,
+      mapSave: qs.mapSave,
+      showParties: qs.showParties ? qs.showParties === "true" : false,
+    }
   }
 
   mapData() {

@@ -12,6 +12,7 @@ class Map extends Component {
     return {
       precinctStates: props.precincts.map(_ => 0),
       draggingDistrict: null,
+      lastDragged: null,
     };
   }
 
@@ -37,14 +38,36 @@ class Map extends Component {
     });
   }
 
+  chooseNewDistrict() {
+    const counts = Array(this.props.numDistricts + 1).fill(0);
+    this.state.precinctStates.forEach(i => counts[i] += 1);
+    counts.forEach((count, i) => {
+      if (i && !count) {
+        return i;
+      }
+    });
+    if (this.state.lastDragged === this.props.numDistricts) {
+      return 1;
+    } else if (this.state.lastDragged) {
+      return this.state.lastDragged + 1;
+    } else {
+      // Not sure we can get here.
+      return 1;
+    }
+  }
+
   makePrecinctMouseDownHandler(index) {
     return (ev) => {
       let district = this.state.precinctStates[index];
-      if (ev.button === 0) {
-        district = district ? district + 1 : 1;
+      if (!district) {
+        // It's blank; fill with the next unused color, if any, or XXX if not
+        district = this.chooseNewDistrict()
+      } else if (ev.button === 0) {
+        district++;
       } else if (ev.button === 2) {
-        district = district ? district - 1 : 0;
+        district--;
       }
+
       if (district <= 0) {
         district += this.props.numDistricts;
       } else if (district > this.props.numDistricts) {
@@ -56,24 +79,37 @@ class Map extends Component {
   }
 
   makePrecinctMouseEnterHandler(index) {
-    return () => {
-      if (this.state.draggingDistrict) {
-        this.setPrecinctDistrict(index, this.state.draggingDistrict);
-      }
-    }
+    return () => this.mouseNext(index);
   }
 
   makePrecinctMouseUpHandler(index) {
     return () => {
-      if (this.state.draggingDistrict) {
-        this.setPrecinctDistrict(index, this.state.draggingDistrict);
-      }
-      this.setState({draggingDistrict: null});
+      this.mouseNext(index);
+      this.mouseDone();
     }
   }
 
   handleMouseLeave() {
-    this.setState({draggingDistrict: null});
+    this.mouseDone();
+  }
+
+  /**
+   * Handle the mouse-drag visiting this district.
+   */
+  mouseNext(index) {
+    if (this.state.draggingDistrict) {
+      this.setPrecinctDistrict(index, this.state.draggingDistrict);
+    }
+  }
+
+  /**
+   * Handle the mouse-drag being completed.
+   */
+  mouseDone() {
+    this.setState({
+      draggingDistrict: null,
+      lastDragged: this.state.draggingDistrict || this.state.lastDragged,
+    });
   }
 
   reset() {

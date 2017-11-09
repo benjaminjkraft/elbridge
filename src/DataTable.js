@@ -9,7 +9,7 @@ class DataTable extends Component {
 
     const districtInfo = {};
     for (let i = 0 ; i <= numDistricts ; i++) {
-      const info = {id: i, size: 0, precincts: []};
+      const info = {id: i, precincts: []};
       if (this.props.showParties) {
         info.parties = {R: 0, D: 0};
       }
@@ -26,6 +26,15 @@ class DataTable extends Component {
       }
       info.precincts.push(p);
     });
+
+    // TODO: should use logic from DistrictRow
+    let validMap = true;
+    for (let i = 0 ; i <= numDistricts ; i++) {
+      if ((districtInfo[i].idealSize || 0) !==
+          districtInfo[i].precincts.length) {
+        validMap = false;
+      }
+    }
 
     let winners;
     let overallWinner;
@@ -56,10 +65,10 @@ class DataTable extends Component {
           info => <DistrictRow key={info.id} {...info} />)}
         </tbody>
       </table>
-      {overallWinner && <table className="global-data">
+      {this.props.showParties && <table className="global-data">
         <tbody>
           <tr>
-            <th>Winner</th>
+            <th>{validMap ? "Winner" : "Winner so far"}</th>
             <td><Winner winner={overallWinner} /></td>
           </tr>
           {/* TODO: more stats here */}

@@ -4,6 +4,9 @@ import Map from './Map';
 import {DEFAULT, MAPS} from  './data/index';
 import {parseQs} from './util';
 
+// create-react-app magically makes process.env work
+const BACKEND_URL = process.env.REACT_APP_BACKEND;
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,11 +38,25 @@ class App extends Component {
                               `&showParties=${this.state.showParties}` +
                               `&mapSave=${save}`);
   }
+
+  handleShare(save) {
+    this.handleSave(save)
+    // TODO: specify name
+    // TODO: say we saved
+    fetch(`${BACKEND_URL}/share`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: `url=${encodeURIComponent(document.location.href)}&name=TODO`,
+    })
+
+
+  }
   
   render() {
     return <Map scale={100}
                 save={this.state.mapSave}
                 onSave={this.handleSave.bind(this)}
+                onShare={this.handleShare.bind(this)}
                 showParties={this.state.showParties}
                 {...this.mapData()} />
   }

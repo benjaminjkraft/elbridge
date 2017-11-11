@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Recent Elbridge maps</title>
+  </head>
+  <body>
+    <ul>
+    {% for map in maps %}
+      <li>
+        <strong><a href="{{map.url}}">{{map.name}}</a></strong>
+        (submitted at {{map.timestamp.isoformat()}})
+      </li>
+    {% endfor %}
+    </ul>
+  </body>
+</html>
+

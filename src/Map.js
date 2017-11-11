@@ -120,6 +120,10 @@ class Map extends Component {
     this.props.onSave(btoa(JSON.stringify(this.state)));
   }
 
+  share() {
+    this.props.onShare(btoa(JSON.stringify(this.state)));
+  }
+
   render() {
     const {scale, width, height, numDistricts, precincts} = this.props;
 
@@ -146,6 +150,9 @@ class Map extends Component {
             </button>
             <button onClick={this.save.bind(this)}>
               Save
+            </button>
+            <button onClick={this.share.bind(this)}>
+              Share
             </button>
           </div>
         </div>

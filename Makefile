@@ -1,8 +1,8 @@
 # TODO: avoid duplicating these in backend dir.
-PROJECT="elbridge-gerry"
-PROD_URL="https://$(PROJECT).appspot.com"
-DEV_PORT="8085"
-DEV_URL="http://localhost:$(DEV_PORT)"
+PROJECT=elbridge-gerry
+PROD_URL=https://$(PROJECT).appspot.com
+DEV_PORT=8085
+DEV_URL=http://localhost:$(DEV_PORT)
 
 serve:
 	cd backend ; $(MAKE) serve PORT=$(DEV_PORT) &

@@ -1,19 +1,13 @@
 // TODO: autogenerate this
 // TODO: do some fancy content-addressing to pin versions etc.
-import DenseCityMap from './DenseCityMap';
-import DotsFirstMap from './DotsFirstMap';
+import CityMap from './CityMap';
 import GridMap from './GridMap';
-import SingleCityMap from './SingleCityMap';
-import UnevenMap from './UnevenMap';
 
 const MAPS = {
-  DenseCityMap,
-  DotsFirstMap,
+  CityMap,
   GridMap,
-  SingleCityMap,
-  UnevenMap,
 };
 
-const DEFAULT = 'SingleCityMap';
+const DEFAULT = 'CityMap';
 
 export {DEFAULT, MAPS};

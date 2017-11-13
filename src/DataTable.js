@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import DistrictRow from './DistrictRow';
+import validate from './validate';
 import {winner} from './util';
 import Winner from  './Winner';
 
@@ -27,14 +28,7 @@ class DataTable extends Component {
       info.precincts.push(p);
     });
 
-    // TODO: should use logic from DistrictRow
-    let validMap = true;
-    for (let i = 0 ; i <= numDistricts ; i++) {
-      if ((districtInfo[i].idealSize || 0) !==
-          districtInfo[i].precincts.length) {
-        validMap = false;
-      }
-    }
+    const validMap = !Object.values(districtInfo).some(validate);
 
     let winners;
     let overallWinner;

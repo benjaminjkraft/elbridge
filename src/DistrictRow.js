@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {districtColors, partyData} from './Constants';
-import {contiguous} from './util';
+import validate from './validate';
 import Winner from './Winner';
 
 class DistrictRow extends Component {
@@ -16,13 +16,10 @@ class DistrictRow extends Component {
     const {id, idealSize, parties, winner, precincts} = this.props;
 
     let incorrectReason;
-    if (idealSize) {
-      if (!contiguous(precincts)) {
-        incorrectReason = "District is not contiguous";
-      } else if (precincts.length > idealSize) {
-        incorrectReason = "District too large";
-      } else if (precincts.length < idealSize) {
-        incorrectReason = "District too small";
+    if (id) {
+      incorrectReason = validate(this.props);
+      if (incorrectReason) {
+        incorrectReason = `District is ${incorrectReason}`;
       }
     } else {
       if (precincts.length !== 0) {
@@ -35,7 +32,7 @@ class DistrictRow extends Component {
       <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
       <td>{precincts.length}{idealSize && `/${idealSize}`}</td>
-      {/* TODO: colors; generalize */}
+      {/* TODO: generalize */}
       {parties && <td><Winner winner={winner} /></td>}
       {parties && <td>
         {parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>}

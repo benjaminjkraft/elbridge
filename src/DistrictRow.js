@@ -15,21 +15,21 @@ class DistrictRow extends Component {
   render () {
     const {id, idealSize, parties, winner, precincts} = this.props;
 
-    let incorrectReason;
+    let invalidReason;
     if (id) {
-      incorrectReason = validate(this.props);
-      if (incorrectReason) {
-        incorrectReason = `District is ${incorrectReason}`;
+      invalidReason = validate(this.props);
+      if (invalidReason) {
+        invalidReason = `District is ${invalidReason}`;
       }
     } else {
       if (precincts.length !== 0) {
-        incorrectReason = "Not all precincts assigned";
+        invalidReason = "Not all precincts assigned";
       }
     }
 
     return <tr style={{backgroundColor: districtColors[id]}}>
       {/* TODO: maybe a fancier tooltip */}
-      <td title={incorrectReason}>{incorrectReason ? "❌" : "✔"}</td>
+      <td title={invalidReason}>{invalidReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
       <td>{precincts.length}{idealSize && `/${idealSize}`}</td>
       {/* TODO: generalize */}

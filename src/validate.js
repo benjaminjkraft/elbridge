@@ -51,18 +51,18 @@ function contiguous(precincts) {
  * valid.
  */
 function validate(districtInfo) {
-  let incorrectReason = null;
+  let invalidReason = null;
   if (districtInfo.id) {
     if (!contiguous(districtInfo.precincts)) {
-      incorrectReason = "is not contiguous";
+      invalidReason = "is not contiguous";
     } else if (districtInfo.precincts.length > districtInfo.idealSize) {
-      incorrectReason = "is too large";
+      invalidReason = "is too large";
     } else if (districtInfo.precincts.length < districtInfo.idealSize) {
-      incorrectReason = "is too small";
+      invalidReason = "is too small";
     }
   }
 
-  return incorrectReason;
+  return invalidReason;
 }
 
 export default validate;

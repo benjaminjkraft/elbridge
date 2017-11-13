@@ -32,6 +32,14 @@
     margin: 0px;
 }
 
+.data-container th {
+    text-align: left;
+}
+
+.district-data td:first-child {
+    text-align: center;
+}
+
 .map-buttons button {
     background-color: white;
     border: 1px solid #ccc;

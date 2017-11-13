@@ -28,7 +28,13 @@ class DataTable extends Component {
       info.precincts.push(p);
     });
 
-    const validMap = !Object.values(districtInfo).some(validate);
+    let invalidReason = null;
+    Object.values(districtInfo).forEach(d => {
+      const maybeReason = validate(d);
+      if (maybeReason) {
+        invalidReason = invalidReason || `District ${d.id} ${maybeReason}`;
+      }
+    });
 
     let winners;
     let overallWinner;
@@ -47,7 +53,7 @@ class DataTable extends Component {
       <table className="district-data">
         <thead>
           <tr>
-            <th></th>
+            <th>Legal</th>
             <th>District</th>
             <th>Precincts</th>
             {winners && <th>Winner</th>}
@@ -62,8 +68,14 @@ class DataTable extends Component {
       {this.props.showParties && <table className="global-data">
         <tbody>
           <tr>
-            <th>{validMap ? "Winner" : "Winner so far"}</th>
-            <td><Winner winner={overallWinner} /></td>
+            <th>Map legality</th>
+            {/* TODO: better align x/check here with dot by winner */}
+            <td>{invalidReason ? `❌ ${invalidReason}` : "✔"}</td>
+          </tr>
+          <tr>
+            <th>Winner</th>
+            <td><Winner winner={overallWinner} />
+            {invalidReason && " (so far)"}</td>
           </tr>
           {/* TODO: more stats here */}
         </tbody>

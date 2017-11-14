@@ -159,6 +159,7 @@ class Map extends Component {
         <DataTable numDistricts={numDistricts}
                    precincts={this.props.precincts}
                    showParties={this.props.showParties}
+                   showMetrics={this.props.showMetrics}
                    precinctStates={this.state.precinctStates} />
       </div>
     );

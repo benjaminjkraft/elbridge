@@ -26,6 +26,7 @@ class App extends Component {
       mapName: MAPS[qs.mapName] ? qs.mapName : DEFAULT,
       mapSave: qs.mapSave,
       showParties: qs.showParties ? qs.showParties === "true" : false,
+      showMetrics: qs.showMetrics ? qs.showMetrics === "true" : false,
     }
   }
 
@@ -36,6 +37,7 @@ class App extends Component {
   handleSave(save) {
     document.location.hash = (`mapName=${this.state.mapName}` +
                               `&showParties=${this.state.showParties}` +
+                              `&showMetrics=${this.state.showMetrics}` +
                               `&mapSave=${save}`);
   }
 
@@ -58,6 +60,7 @@ class App extends Component {
                 onSave={this.handleSave.bind(this)}
                 onShare={this.handleShare.bind(this)}
                 showParties={this.state.showParties}
+                showMetrics={this.state.showMetrics}
                 {...this.mapData()} />
   }
 }

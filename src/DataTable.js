@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import DistrictRow from './DistrictRow';
 import validate from './validate';
-import {winner} from './util';
+import {population, winner} from './util';
 import Winner from  './Winner';
 
 class DataTable extends Component {
@@ -15,7 +15,7 @@ class DataTable extends Component {
         info.parties = {R: 0, D: 0};
       }
       if (i) {
-        info.idealSize = precinctStates.length / numDistricts;
+        info.idealSize = population(precincts) / numDistricts;
       }
       districtInfo[i] = info;
     }
@@ -23,7 +23,7 @@ class DataTable extends Component {
       const district = precinctStates[i];
       const info = districtInfo[district];
       if (this.props.showParties) {
-        info.parties[p.party] += 1;
+        info.parties[p.party] += p.dots.length;
       }
       info.precincts.push(p);
     });
@@ -55,7 +55,7 @@ class DataTable extends Component {
           <tr>
             <th>Legal</th>
             <th>District</th>
-            <th>Precincts</th>
+            <th>Pop.</th>
             {winners && <th>Winner</th>}
             {this.props.showParties && <th>Party ID</th>}
           </tr>

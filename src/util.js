@@ -28,4 +28,8 @@ function parseQs(data) {
   return retval;
 }
 
-export {winner, parseQs};
+function population(precincts) {
+  return precincts.reduce((acc, precinct) => acc + precinct.dots.length, 0)
+}
+
+export {winner, parseQs, population};

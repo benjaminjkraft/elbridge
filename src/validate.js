@@ -1,3 +1,4 @@
+import {population} from './util';
 // Return whether the precincts are adjacent.
 //
 // Each argument should be an object with properties x, y, width, and height.
@@ -55,9 +56,9 @@ function validate(districtInfo) {
   if (districtInfo.id) {
     if (!contiguous(districtInfo.precincts)) {
       invalidReason = "is not contiguous";
-    } else if (districtInfo.precincts.length > districtInfo.idealSize) {
+    } else if (population(districtInfo.precincts) > districtInfo.idealSize) {
       invalidReason = "is too large";
-    } else if (districtInfo.precincts.length < districtInfo.idealSize) {
+    } else if (population(districtInfo.precincts) < districtInfo.idealSize) {
       invalidReason = "is too small";
     }
   }

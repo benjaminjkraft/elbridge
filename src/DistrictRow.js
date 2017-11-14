@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {districtColors, partyData} from './Constants';
+import {population} from './util';
 import validate from './validate';
 import Winner from './Winner';
 
@@ -31,7 +32,7 @@ class DistrictRow extends Component {
       {/* TODO: maybe a fancier tooltip */}
       <td title={invalidReason}>{invalidReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
-      <td>{precincts.length}{idealSize && `/${idealSize}`}</td>
+        <td>{population(precincts)}{idealSize && `/${idealSize}`}</td>
       {/* TODO: generalize */}
       {parties && <td><Winner winner={winner} /></td>}
       {parties && <td>

@@ -28,8 +28,12 @@ function parseQs(data) {
   return retval;
 }
 
-function population(precincts) {
-  return precincts.reduce((acc, precinct) => acc + precinct.dots.length, 0)
+function sum(vals) {
+  return vals.reduce((a, b) => a + b, 0);
 }
 
-export {winner, parseQs, population};
+function population(precincts) {
+  return sum(precincts.map(p => p.dots.length));
+}
+
+export {winner, parseQs, sum, population};

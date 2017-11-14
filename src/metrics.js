@@ -1,5 +1,5 @@
 import React from 'react';
-import {population} from './util';
+import {population, sum} from './util';
 import Winner from  './Winner';
 
 function wastedVotes(districtInfo) {
@@ -21,4 +21,35 @@ function efficiencyGap(wasted, totalPop){
   </span>;
 }
 
-export {wastedVotes, efficiencyGap};
+function voteShares(districtInfos) {
+  let vals = [];
+  Object.values(districtInfos).forEach(info => {
+    if (info.precincts.length) {
+      vals.push(info.parties.R / population(info.precincts));
+    }
+  });
+  return vals;
+}
+
+function mean(districtInfos) {
+  const shares = voteShares(districtInfos);
+  if (!shares.length) {
+    return null;
+  } else {
+    return sum(shares) / Object.keys(districtInfos).length;
+  }
+}
+
+function median(districtInfos) {
+  const shares = voteShares(districtInfos);
+  shares.sort();
+  if (!shares.length) {
+    return null;
+  } else if (shares.length % 2 === 0) {
+    return (shares[shares.length / 2 - 1] + shares[shares.length / 2]) / 2;
+  } else {
+    return shares[(shares.length - 1) / 2];
+  }
+}
+
+export {wastedVotes, efficiencyGap, mean, median};

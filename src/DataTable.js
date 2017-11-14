@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {partyData} from './constants';
 import DistrictRow from './DistrictRow';
-import {wastedVotes, efficiencyGap} from './metrics';
+import {wastedVotes, efficiencyGap, mean, median} from './metrics';
 import validate from './validate';
 import {population, winner} from './util';
 import Winner from  './Winner';
@@ -39,27 +39,31 @@ class DataTable extends Component {
       }
     });
 
+    const realDistricts = Object.values(districtInfo).filter(info => info.id);
+
     let winners;
     let overallWinner;
     if (this.props.showParties) {
       winners = {R: 0, D: 0};
-      Object.values(districtInfo).forEach(info => {
-        if (info.id !== 0) {
-          info.winner = winner(info.parties);
-          winners[info.winner] += 1;
-        }
+      realDistricts.forEach(info => {
+        info.winner = winner(info.parties);
+        winners[info.winner] += 1;
       });
       overallWinner = winner(winners);
     }
 
     let wasted;
+    let meanShareR;
+    let medianShareR;
     if (this.props.showMetrics) {
       wasted = {R: 0, D: 0}
-      Object.values(districtInfo).forEach(info => {
+      realDistricts.forEach(info => {
         info.wasted = wastedVotes(info);
         Object.entries(info.wasted).map(
           ([party, votes]) => wasted[party] += votes);
       });
+      meanShareR = mean(realDistricts);
+      medianShareR = median(realDistricts);
     }
 
     return <div className="data-container">
@@ -79,6 +83,7 @@ class DataTable extends Component {
           info => <DistrictRow key={info.id} {...info} />)}
         </tbody>
       </table>
+      {/* TODO(benkraft): separate component! */}
       <table className="global-data">
         <tbody>
           <tr>
@@ -102,7 +107,33 @@ class DataTable extends Component {
             <th>Efficiency Gap</th>
             <td>{efficiencyGap(wasted, totalPop)}</td>
           </tr>}
-          {/* TODO: more stats here */}
+          {this.props.showMetrics && <tr className="border"/>}
+          {/* TODO: dedupe */}
+          {this.props.showMetrics && <tr>
+            <th>Mean</th>
+            {/* TODO: maybe show both vote shares? */}
+            {meanShareR === null ?
+              <td>n/a</td> :
+              <td>{(meanShareR * 100).toFixed(1)}% {partyData.R.name}</td>}
+          </tr>}
+          {this.props.showMetrics && <tr>
+            <th>Median</th>
+            {medianShareR === null ?
+              <td>n/a</td> :
+              <td>{(medianShareR * 100).toFixed(1)}% {partyData.R.name}</td>}
+          </tr>}
+          {this.props.showMetrics && <tr>
+            <th>Difference</th>
+            {meanShareR === null || medianShareR === null ?
+              <td>n/a</td> :
+              <td>
+                {Math.abs((medianShareR - meanShareR) * 100).toFixed(1)}%
+                ({medianShareR === meanShareR ?
+                    "no" :
+                    <Winner winner={medianShareR > meanShareR ? "R" : "D"} />}
+                    {" "}advantage)
+              </td>}
+          </tr>}
         </tbody>
       </table>
     </div>;

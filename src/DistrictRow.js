@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {districtColors, partyData} from './Constants';
+import {districtColors, partyData} from './constants';
 import {population} from './util';
 import validate from './validate';
 import Winner from './Winner';
@@ -14,7 +14,7 @@ class DistrictRow extends Component {
   }
 
   render () {
-    const {id, idealSize, parties, winner, precincts} = this.props;
+    const {id, idealSize, parties, wasted, winner, precincts} = this.props;
 
     let invalidReason;
     if (id) {
@@ -33,10 +33,13 @@ class DistrictRow extends Component {
       <td title={invalidReason}>{invalidReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
         <td>{population(precincts)}{idealSize && `/${idealSize}`}</td>
-      {/* TODO: generalize */}
       {parties && <td><Winner winner={winner} /></td>}
+      {/* TODO: generalize */}
+      {/* TODO: extract common parts */}
       {parties && <td>
         {parties.R} {partyData.R.name}/{parties.D} {partyData.D.name}</td>}
+      {wasted && <td>
+        {wasted.R} {partyData.R.name}/{wasted.D} {partyData.D.name}</td>}
     </tr>
   }
 }
@@ -45,6 +48,7 @@ DistrictRow.propTypes = {
   id: PropTypes.number.isRequired,
   idealSize: PropTypes.number,
   parties: PropTypes.objectOf(PropTypes.number),
+  wasted: PropTypes.objectOf(PropTypes.number),
   winner: PropTypes.string,
   // TODO: more precise type
   precincts: PropTypes.arrayOf(PropTypes.object).isRequired,

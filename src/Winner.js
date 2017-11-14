@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {partyData} from './Constants';
+import {partyData} from './constants';
 
 class Winner extends Component {
   render() {

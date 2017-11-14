@@ -27,6 +27,10 @@
     border-bottom: 1px solid #ccc;
 }
 
+.data-container tr.border {
+    border-bottom: 1px solid #ccc;
+}
+
 .data-container td, .data-container th {
     padding: 2px 5px;
     margin: 0px;

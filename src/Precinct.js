@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {districtColors, partyData} from './Constants';
+import {districtColors, partyData} from './constants';
 
 class Precinct extends Component {
   renderDots(dots, party) {

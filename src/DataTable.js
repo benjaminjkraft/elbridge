@@ -114,20 +114,20 @@ class DataTable extends Component {
             {/* TODO: maybe show both vote shares? */}
             {meanShareR === null ?
               <td>n/a</td> :
-              <td>{(meanShareR * 100).toFixed(1)}% {partyData.R.name}</td>}
+              <td>{(meanShareR * 100).toFixed(0)}% {partyData.R.name}</td>}
           </tr>}
           {this.props.showMetrics && <tr>
             <th>Median</th>
             {medianShareR === null ?
               <td>n/a</td> :
-              <td>{(medianShareR * 100).toFixed(1)}% {partyData.R.name}</td>}
+              <td>{(medianShareR * 100).toFixed(0)}% {partyData.R.name}</td>}
           </tr>}
           {this.props.showMetrics && <tr>
             <th>Difference</th>
             {meanShareR === null || medianShareR === null ?
               <td>n/a</td> :
               <td>
-                {Math.abs((medianShareR - meanShareR) * 100).toFixed(1)}%
+                {Math.abs((medianShareR - meanShareR) * 100).toFixed(0)}%
                 ({medianShareR === meanShareR ?
                     "no" :
                     <Winner winner={medianShareR > meanShareR ? "R" : "D"} />}

@@ -17,7 +17,7 @@ function efficiencyGap(wasted, totalPop){
   const winner = gapR > 0 ? "D" : "R";
   gapR = Math.abs(gapR);
   return <span>
-    {gapR.toFixed(1)}% (<Winner winner={winner} /> advantage)
+    {gapR.toFixed(0)}% (<Winner winner={winner} /> advantage)
   </span>;
 }
 

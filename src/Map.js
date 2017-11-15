@@ -154,6 +154,13 @@ class Map extends Component {
             <button onClick={this.share.bind(this)}>
               Share
             </button>
+            <button onClick={this.props.toggleParties}>
+              {this.props.showParties ? "Hide Parties" : "Show Parties"}
+            </button>
+            {this.props.showParties &&
+              <button onClick={this.props.toggleMetrics}>
+                {this.props.showMetrics ? "Hide Metrics" : "Show Metrics"}
+              </button>}
           </div>
         </div>
         <DataTable numDistricts={numDistricts}

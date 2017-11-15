@@ -87,7 +87,7 @@ class DataTable extends Component {
       <table className="global-data">
         <tbody>
           <tr>
-            <th>Map legality</th>
+            <th>Map Legality</th>
             {/* TODO: better align x/check here with dot by winner */}
             <td>{invalidReason ? `❌ ${invalidReason}` : "✔"}</td>
           </tr>

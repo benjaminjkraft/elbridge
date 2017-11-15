@@ -50,8 +50,17 @@ class App extends Component {
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: `url=${encodeURIComponent(document.location.href)}&name=TODO`,
     })
+  }
 
+  handleToggleParties() {
+    this.setState({
+      showParties: !this.state.showParties,
+      showMetrics: this.state.showMetrics && !this.state.showParties,
+    });
+  }
 
+  handleToggleMetrics() {
+    this.setState({showMetrics: !this.state.showMetrics});
   }
   
   render() {
@@ -61,6 +70,8 @@ class App extends Component {
                 onShare={this.handleShare.bind(this)}
                 showParties={this.state.showParties}
                 showMetrics={this.state.showMetrics}
+                toggleParties={this.handleToggleParties.bind(this)}
+                toggleMetrics={this.handleToggleMetrics.bind(this)}
                 {...this.mapData()} />
   }
 }

@@ -27,10 +27,6 @@ class Map extends Component {
     return this.blankState(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState(this.initialState(nextProps));
-  }
-
   setPrecinctDistrict(index, district) {
     this.setState(({precinctStates}, _) => {
       precinctStates[index] = district;

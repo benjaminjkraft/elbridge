@@ -19,7 +19,12 @@ deploy:
 deploy_backend:
 	cd backend ; $(MAKE) deploy PROJECT=$(PROJECT)
 
+check: test flow;
+
 test:
 	yarnpkg run test
 
-.PHONY: serve deploy deploy_backend test
+flow:
+	yarnpkg run flow
+
+.PHONY: serve deploy deploy_backend test flow check

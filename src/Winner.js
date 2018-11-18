@@ -1,7 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import {partyData} from './constants';
+import type {Party} from './types';
 
-class Winner extends Component {
+type Props = {|winner: Party|};
+
+class Winner extends Component<Props> {
   render() {
     const {winner} = this.props;
     if (winner === undefined) {
@@ -16,7 +20,5 @@ class Winner extends Component {
     }
   }
 }
-
-Winner.propTypes = {winner: PropTypes.string};
 
 export default Winner

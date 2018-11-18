@@ -1,11 +1,13 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
 import {districtColors, partyData} from './constants';
+import type {DistrictInfo} from './types';
 import {population} from './util';
 import validate from './validate';
 import Winner from './Winner';
 
-class DistrictRow extends Component {
-  districtName(id) {
+class DistrictRow extends Component<DistrictInfo> {
+  districtName(id: number) {
     if (id === 0) {
       return "Unassigned";
     } else {
@@ -33,6 +35,7 @@ class DistrictRow extends Component {
       <td title={invalidReason}>{invalidReason ? "❌" : "✔"}</td>
       <th>{this.districtName(id)}</th>
         <td>{population(precincts)}{idealSize && `/${idealSize}`}</td>
+      {/* $FlowIgnore: figure out why it can't deduce that winner is here */}
       {parties && <td><Winner winner={winner} /></td>}
       {/* TODO: generalize */}
       {/* TODO: extract common parts */}
@@ -42,16 +45,6 @@ class DistrictRow extends Component {
         {wasted.R} {partyData.R.name}/{wasted.D} {partyData.D.name}</td>}
     </tr>
   }
-}
-
-DistrictRow.propTypes = {
-  id: PropTypes.number.isRequired,
-  idealSize: PropTypes.number,
-  parties: PropTypes.objectOf(PropTypes.number),
-  wasted: PropTypes.objectOf(PropTypes.number),
-  winner: PropTypes.string,
-  // TODO: more precise type
-  precincts: PropTypes.arrayOf(PropTypes.object).isRequired,
 }
 
 export default DistrictRow;

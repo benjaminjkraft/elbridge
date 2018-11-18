@@ -4,6 +4,7 @@
   "homepage": "http://www.benkraft.org/elbridge/",
   "private": true,
   "devDependencies": {
+    "flow-bin": "^0.86.0",
     "react-scripts": "2.1.1"
   },
   "dependencies": {

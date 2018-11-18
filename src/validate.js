@@ -1,4 +1,7 @@
+// @flow
+import type {DistrictInfo} from './types';
 import {population} from './util';
+
 // Return whether the precincts are adjacent.
 //
 // Each argument should be an object with properties x, y, width, and height.
@@ -51,13 +54,15 @@ function contiguous(precincts) {
  * Returns a reason (e.g. "is not contiguous") or null if the district is
  * valid.
  */
-function validate(districtInfo) {
+function validate(districtInfo: DistrictInfo) {
   let invalidReason = null;
-  if (districtInfo.id) {
+  if (districtInfo.idealSize) {
     if (!contiguous(districtInfo.precincts)) {
       invalidReason = "is not contiguous";
+      // $FlowIgnore
     } else if (population(districtInfo.precincts) > districtInfo.idealSize) {
       invalidReason = "is too large";
+      // $FlowIgnore
     } else if (population(districtInfo.precincts) < districtInfo.idealSize) {
       invalidReason = "is too small";
     }

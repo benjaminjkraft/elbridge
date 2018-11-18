@@ -1,20 +1,30 @@
+// @flow
 import React, { Component } from 'react';
 import './App.css';
 import Map from './Map';
 import {DEFAULT, MAPS} from  './data/index';
 import {parseQs} from './util';
 
-// create-react-app magically makes process.env work
-const BACKEND_URL = process.env.REACT_APP_BACKEND;
+type Props = {||};
 
-class App extends Component {
-  constructor(props) {
+type State = {|
+  mapName: string,
+  mapSave: string,
+  showParties: boolean,
+  showMetrics: boolean,
+|};
+
+// create-react-app magically makes process.env work ($FlowIgnore)
+const BACKEND_URL: string = process.env.REACT_APP_BACKEND;
+
+class App extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = this.initialState(props);
     window.onhashchange = () => this.setState(this.initialState(this.props));
   }
 
-  initialState(props) {
+  initialState(props: Props) {
     let qs;
     try {
       qs = parseQs(document.location.hash.slice(1));
@@ -34,14 +44,15 @@ class App extends Component {
     return MAPS[this.state.mapName];
   }
 
-  handleSave(save) {
-    document.location.hash = (`mapName=${this.state.mapName}` +
-                              `&showParties=${this.state.showParties}` +
-                              `&showMetrics=${this.state.showMetrics}` +
-                              `&mapSave=${save}`);
+  handleSave(save: string) {
+    document.location.hash = (
+        `mapName=${this.state.mapName}` +
+        `&showParties=${String(this.state.showParties)}` +
+        `&showMetrics=${String(this.state.showMetrics)}` +
+        `&mapSave=${save}`);
   }
 
-  handleShare(save) {
+  handleShare(save: string) {
     this.handleSave(save)
     // TODO: specify name
     // TODO: say we saved

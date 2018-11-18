@@ -1,14 +1,33 @@
-import React, { Component, PropTypes } from 'react';
+// @flow
+import React, { Component } from 'react';
+import type {MapData} from './types';
 import Precinct from './Precinct';
 import DataTable from './DataTable';
 
-class Map extends Component {
-  constructor(props) {
+type Props = {|
+  ...MapData,
+  save?: string,
+  onSave: string => void,
+  onShare: string => void,
+  toggleParties: () => void,
+  toggleMetrics: () => void,
+  showParties: boolean,
+  showMetrics: boolean,
+|}
+
+type State = {|
+  precinctStates: Array<number>,
+  draggingDistrict: ?number,
+  lastDragged: ?number,
+|}
+
+class Map extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = this.initialState(props);
   }
 
-  blankState(props) {
+  blankState(props: Props) {
     return {
       precinctStates: props.precincts.map(_ => 0),
       draggingDistrict: null,
@@ -16,7 +35,7 @@ class Map extends Component {
     };
   }
 
-  initialState(props) {
+  initialState(props: Props) {
     if (props.save) {
       try {
         return JSON.parse(atob(props.save));
@@ -27,7 +46,7 @@ class Map extends Component {
     return this.blankState(props);
   }
 
-  setPrecinctDistrict(index, district) {
+  setPrecinctDistrict(index: number, district: number) {
     this.setState(({precinctStates}, _) => {
       precinctStates[index] = district;
       return {precinctStates};
@@ -52,8 +71,8 @@ class Map extends Component {
     }
   }
 
-  makePrecinctMouseDownHandler(index) {
-    return (ev) => {
+  makePrecinctMouseDownHandler(index: number) {
+    return (ev: any) => {
       let district = this.state.precinctStates[index];
       if (!district) {
         // It's blank; fill with the next unused color, if any, or XXX if not
@@ -74,11 +93,11 @@ class Map extends Component {
     }
   }
 
-  makePrecinctMouseEnterHandler(index) {
+  makePrecinctMouseEnterHandler(index: number) {
     return () => this.mouseNext(index);
   }
 
-  makePrecinctMouseUpHandler(index) {
+  makePrecinctMouseUpHandler(index: number) {
     return () => {
       this.mouseNext(index);
       this.mouseDone();
@@ -92,7 +111,7 @@ class Map extends Component {
   /**
    * Handle the mouse-drag visiting this district.
    */
-  mouseNext(index) {
+  mouseNext(index: number) {
     if (this.state.draggingDistrict) {
       this.setPrecinctDistrict(index, this.state.draggingDistrict);
     }
@@ -131,7 +150,7 @@ class Map extends Component {
                onMouseLeave={this.handleMouseLeave.bind(this)}>
             {precincts.map((precinct, i) => {
               return <Precinct
-                key={[precinct.x, precinct.y]} {...precinct}
+                key={`${precinct.x} ${precinct.y}`} {...precinct}
                 party={this.props.showParties ? precinct.party : undefined}
                 district={this.state.precinctStates[i] || 0}
                 onMouseDown={this.makePrecinctMouseDownHandler(i)}
@@ -168,17 +187,5 @@ class Map extends Component {
     );
   }
 }
-
-Map.PropTypes = {
-  scale: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  numDistricts: PropTypes.number.isRequired,
-  precincts: PropTypes.arrayOf(Precinct.PropTypes),
-  save: PropTypes.string,
-  onSave: PropTypes.func.isRequired,
-  showParties: PropTypes.bool.isRequired,
-};
-
 
 export default Map;

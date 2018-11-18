@@ -1,8 +1,11 @@
+// @flow
+import type {PrecinctData, StatByParty} from './types';
+
 // Find the key for the larger of the values.
 //
 // obj should be an object with two keys and numerical values.  Returns the key
 // corresponding to the larger value, or null if they are equal.
-function winner(obj) {
+function winner(obj: StatByParty): ?string {
   const [k1, k2] = Object.keys(obj);
   if (obj[k1] > obj[k2]) {
     return k1;
@@ -13,7 +16,7 @@ function winner(obj) {
   }
 }
 
-function parseQs(data) {
+function parseQs(data: string): {[string]: string} {
   if (data[0] === '#' || data[0] === '?') {
     data = data.slice(1);
   }
@@ -28,11 +31,11 @@ function parseQs(data) {
   return retval;
 }
 
-function sum(vals) {
+function sum(vals: $ReadOnlyArray<number>): number {
   return vals.reduce((a, b) => a + b, 0);
 }
 
-function population(precincts) {
+function population(precincts: $ReadOnlyArray<PrecinctData>) {
   return sum(precincts.map(p => p.dots.length));
 }
 

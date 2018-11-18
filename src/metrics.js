@@ -1,14 +1,16 @@
+// @flow
 import React from 'react';
+import type {DistrictInfoWithParties, StatByParty} from './types';
 import {population, sum} from './util';
 import Winner from  './Winner';
 
-function wastedVotes(districtInfo) {
+function wastedVotes(districtInfo: DistrictInfoWithParties) {
   const votes = Object.assign({}, districtInfo.parties);
   votes[districtInfo.winner] -= population(districtInfo.precincts) / 2
   return votes
 }
 
-function efficiencyGap(wasted, totalPop){
+function efficiencyGap(wasted: StatByParty, totalPop: number){
   if (wasted.R === wasted.D) {
     return "0% (no advantage)";
   }
@@ -23,7 +25,8 @@ function efficiencyGap(wasted, totalPop){
 
 function voteShares(districtInfos) {
   let vals = [];
-  Object.values(districtInfos).forEach(info => {
+  // $FlowIgnore
+  Object.values(districtInfos).forEach((info: DistrictInfo) => {
     if (info.precincts.length) {
       vals.push(info.parties.R / population(info.precincts));
     }
@@ -31,7 +34,7 @@ function voteShares(districtInfos) {
   return vals;
 }
 
-function mean(districtInfos) {
+function mean(districtInfos: {|[string]: DistrictInfoWithParties|}) {
   const shares = voteShares(districtInfos);
   if (!shares.length) {
     return null;
@@ -40,7 +43,7 @@ function mean(districtInfos) {
   }
 }
 
-function median(districtInfos) {
+function median(districtInfos: {|[string]: DistrictInfoWithParties|}) {
   const shares = voteShares(districtInfos);
   shares.sort();
   if (!shares.length) {

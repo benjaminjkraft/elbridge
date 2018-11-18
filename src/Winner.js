@@ -12,7 +12,9 @@ class Winner extends Component<Props> {
       return null;
     } else {
       return <span>
-        <span style={{color: winner ? partyData[winner].color : "black"}}>
+        {/* https://github.com/evcohen/eslint-plugin-jsx-a11y/issues/408 */}
+        {/* eslint-disable-next-line */}
+        <span aria-hidden="true" style={{color: winner ? partyData[winner].color : "black"}}>
           ⚫
         </span>
         {winner === null ? "Tie" : partyData[winner].name}

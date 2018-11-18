@@ -1,6 +1,13 @@
 {
-  "main.css": "static/css/main.7a3cab49.css",
-  "main.css.map": "static/css/main.7a3cab49.css.map",
-  "main.js": "static/js/main.752fece2.js",
-  "main.js.map": "static/js/main.752fece2.js.map"
+  "main.css": "/elbridge/static/css/main.93a0c746.chunk.css",
+  "main.js": "/elbridge/static/js/main.95d11077.chunk.js",
+  "main.js.map": "/elbridge/static/js/main.95d11077.chunk.js.map",
+  "static/js/1.1abe7352.chunk.js": "/elbridge/static/js/1.1abe7352.chunk.js",
+  "static/js/1.1abe7352.chunk.js.map": "/elbridge/static/js/1.1abe7352.chunk.js.map",
+  "runtime~main.js": "/elbridge/static/js/runtime~main.0dc2c6e2.js",
+  "runtime~main.js.map": "/elbridge/static/js/runtime~main.0dc2c6e2.js.map",
+  "static/css/main.93a0c746.chunk.css.map": "/elbridge/static/css/main.93a0c746.chunk.css.map",
+  "index.html": "/elbridge/index.html",
+  "precache-manifest.769c709975437837a13252f675bfe387.js": "/elbridge/precache-manifest.769c709975437837a13252f675bfe387.js",
+  "service-worker.js": "/elbridge/service-worker.js"
 }

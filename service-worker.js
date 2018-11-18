@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/elbridge/precache-manifest.769c709975437837a13252f675bfe387.js"
+  "/elbridge/precache-manifest.d9d09593ce60ec54b85204d9d2874dbf.js"
 );
 
 workbox.clientsClaim();

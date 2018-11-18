@@ -1,7 +1,8 @@
 // @flow
 import React, { Component } from 'react';
-import type {PrecinctData, Point} from './types';
-import {districtColors, partyData} from './constants';
+import {districtColors} from './constants';
+import House from './House';
+import type {PrecinctData} from './types';
 
 type Props = {|
   ...PrecinctData,
@@ -13,12 +14,6 @@ type Props = {|
 |}
 
 class Precinct extends Component<Props> {
-  renderDots(dots: $ReadOnlyArray<Point>, party?: string): any {
-    const color = party ? partyData[party].color: "black";
-    // TODO(benkraft): make dots clickable too
-    return dots && dots.map(({x, y}, i) => <circle fill={color} key={i} cx={x} cy={y} r={0.03} />);
-  }
-
   render() {
     const {
         district, dots, party,
@@ -26,7 +21,7 @@ class Precinct extends Component<Props> {
         ...props} = this.props;
     return <g {...{onMouseDown, onMouseEnter, onMouseUp, onContextMenu}}>
       <rect stroke="black" strokeWidth="0.01" fill={districtColors[district]} {...props} />
-      {this.renderDots(dots, party)}
+      {dots && dots.map((point, i) => <House party={party} point={point} key={i} />)}
     </g>;
   }
 }
